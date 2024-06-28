@@ -1,4 +1,5 @@
 public class ATM {
+
     public double CashAvailable;
 
     public void Authorization(){
