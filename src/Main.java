@@ -27,6 +27,10 @@ public class Main {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        CreditCard creditCard1 = new CreditCard(4111522263337444L, 1024, false);
+
+        System.out.println(creditCard1.getCreditCardNumber() + " " + creditCard1.getPIN() + " " + creditCard1.getAmountOfMoney() + " " + creditCard1.getIsCreditCardBlocked());
         /* blueprint for checking date of blocked card
 
         LocalDateTime myDateObj = LocalDateTime.now();

@@ -1,30 +1,33 @@
 public class CreditCard extends BankAccount {
 
-    private int CreditCardNumber;
+    private long CreditCardNumber;
     private int PIN;
     private int AmountOfIncorrectPINsEntered;
     private boolean IsCreditCardBlocked;
     //private storing data of blocking
 
-    public CreditCard(int CreditCardNumber, int PIN, boolean IsCreditCardBlocked){
+    public CreditCard(long CreditCardNumber, int PIN, boolean IsCreditCardBlocked){
         super();
         this.CreditCardNumber = CreditCardNumber;
         this.PIN = PIN;
         this.IsCreditCardBlocked = IsCreditCardBlocked;
     }
 
-    public void setCreditCardNumber(int CreditCardNumber){
+    public void setCreditCardNumber(long CreditCardNumber){
         this.CreditCardNumber = CreditCardNumber;
     }
     public void setPIN(int PIN){
         this.PIN = PIN;
     }
 
-    public int getCreditCardNumber(){
+    public long getCreditCardNumber(){
         return CreditCardNumber;
     }
     public int getPIN(){
         return PIN;
+    }
+    public boolean getIsCreditCardBlocked(){
+        return IsCreditCardBlocked;
     }
 
 }
