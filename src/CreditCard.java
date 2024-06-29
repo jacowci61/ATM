@@ -6,8 +6,8 @@ public class CreditCard extends BankAccount {
     private boolean IsCreditCardBlocked;
     //private storing data of blocking
 
-    public CreditCard(long CreditCardNumber, int PIN, boolean IsCreditCardBlocked){
-        super();
+    public CreditCard(BankAccount bankAccount, long CreditCardNumber, int PIN, boolean IsCreditCardBlocked){
+        super(bankAccount.getBankAccountID(), bankAccount.getAmountOfMoney());
         this.CreditCardNumber = CreditCardNumber;
         this.PIN = PIN;
         this.IsCreditCardBlocked = IsCreditCardBlocked;
@@ -29,5 +29,4 @@ public class CreditCard extends BankAccount {
     public boolean getIsCreditCardBlocked(){
         return IsCreditCardBlocked;
     }
-
 }
