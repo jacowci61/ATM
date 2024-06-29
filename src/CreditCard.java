@@ -6,6 +6,7 @@ public class CreditCard extends BankAccount {
     private boolean IsCreditCardBlocked;
     //private storing data of blocking
 
+
     public CreditCard(int CreditCardNumber, int PIN, boolean IsCreditCardBlocked){
         this.CreditCardNumber = CreditCardNumber;
         this.PIN = PIN;
