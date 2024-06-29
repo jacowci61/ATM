@@ -1,17 +1,17 @@
 public class BankAccount {
 
     private double AmountOfMoney;
-    // basically make data private (unaccessible from outside of the class) and make getters/setters to access it
+    // basically make data private (unaccessible from outside the class) and make getters/setters to access it
 
     public BankAccount(){
         this.AmountOfMoney = AmountOfMoney;
     }
 
     public void setAmountOfMoney(double AmountOfMoney){
-
+        this.AmountOfMoney = AmountOfMoney;
     }
 
-    public void getAmountOfMoney(){
-
+    public double getAmountOfMoney(){
+        return AmountOfMoney;
     }
 }
