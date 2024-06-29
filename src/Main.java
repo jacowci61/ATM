@@ -27,12 +27,12 @@ public class Main {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        BankAccount bankAccount1 = new BankAccount("u123",2550.0);
+        CreditCard creditCard1 = new CreditCard(bankAccount1,4111522263337444L, 1024, false);
 
-        CreditCard creditCard1 = new CreditCard(4111522263337444L, 1024, false);
+        System.out.println(creditCard1.getBankAccountID() + " " + creditCard1.getAmountOfMoney() + " " + " " + creditCard1.getCreditCardNumber() + " " + creditCard1.getPIN() + " " + creditCard1.getIsCreditCardBlocked());
 
-        System.out.println(creditCard1.getCreditCardNumber() + " " + creditCard1.getPIN() + " " + creditCard1.getAmountOfMoney() + " " + creditCard1.getIsCreditCardBlocked());
         /* blueprint for checking date of blocked card
-
         LocalDateTime myDateObj = LocalDateTime.now();
         DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
         String formattedDate = myDateObj.format(myFormatObj);
