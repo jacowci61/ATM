@@ -51,20 +51,13 @@ public class Main {
         String textToFind = "4789522228948954";
 
         try {
-            findLinesContainingText(filePath, textToFind);
+            String str2 = FindLineContainingText.findLineContainingText(filePath, textToFind);
+            String[] ObjectData = str2.split("\\s+");
+            for (String data : ObjectData){
+                System.out.println(data);
+            }
         } catch (IOException e) {
             e.printStackTrace();
-        }
-    }
-
-    public static void findLinesContainingText(String filePath, String textToFind) throws IOException {
-        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath))) {
-            String line;
-            while ((line = bufferedReader.readLine()) != null) {
-                if (line.contains(textToFind)) {
-                    System.out.println("Extracted line: " + line);
-                }
-            }
         }
 
         /* blueprint for checking date of blocked card
@@ -73,5 +66,35 @@ public class Main {
         String formattedDate = myDateObj.format(myFormatObj);
         System.out.println("Current date: " + formattedDate);
          */
+    }
+
+    public class FindLineContainingText {
+        public static void main(String[] args) {
+            String filePath = "example.txt";
+            String textToFind = "specific text";
+
+            try {
+                String matchingLine = findLineContainingText(filePath, textToFind);
+                if (matchingLine != null) {
+                    System.out.println("Matching line: " + matchingLine);
+                } else {
+                    System.out.println("No matching line found.");
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        public static String findLineContainingText(String filePath, String textToFind) throws IOException {
+            try (BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath))) {
+                String line;
+                while ((line = bufferedReader.readLine()) != null) {
+                    if (line.contains(textToFind)) {
+                        return line;
+                    }
+                }
+            }
+            return null; // Return null if no matching line is found
+        }
     }
 }
