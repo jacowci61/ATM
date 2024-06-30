@@ -19,6 +19,9 @@ public class CreditCard extends BankAccount {
     public void setPIN(int PIN){
         this.PIN = PIN;
     }
+    public void setIsCreditCardBlocked(Boolean IsCreditCardBlocked){
+        this.IsCreditCardBlocked = IsCreditCardBlocked;
+    }
 
     public long getCreditCardNumber(){
         return CreditCardNumber;

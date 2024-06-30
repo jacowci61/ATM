@@ -79,14 +79,26 @@ public class Main {
             // with IO-operations. Can make two variants, for now it'll be a direct rewrite w/o setters
             // On a second thought - why use lines[]? Because its easiest way to handle searching for element
 
+            String str2 =creditCard1.getAmountOfMoney() + " " + creditCard1.getIsCreditCardBlocked();
+            System.out.println("\nUnedited object: " + str2);
+            System.out.println("\n");
+
             for (String object : TempObject2) {
                 System.out.println("Before: " + object);
             }
             TempObject2[1] = String.valueOf(4900.0);
             TempObject2[4] = String.valueOf(true); // setting that toggles ifcardisblocked
+
+            System.out.println("\n");
             for (String object : TempObject2) {
                 System.out.println("After: " + object);
             }
+
+            creditCard1.setAmountOfMoney(Double.parseDouble(TempObject2[1]));
+            creditCard1.setIsCreditCardBlocked(Boolean.valueOf(TempObject2[4]));
+            String str21 = creditCard1.getAmountOfMoney() + " " + creditCard1.getIsCreditCardBlocked();
+            System.out.println("\nEdited object: " + str21);
+
             System.out.println("\n");
             if (result != null) {
                 System.out.println("Matching element: " + result);
