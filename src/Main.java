@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -49,16 +50,22 @@ public class Main {
         */
 
         String textToFind = "4789522228948954";
-
+        String[] ObjectData;
         try {
             String str2 = FindLineContainingText.findLineContainingText(filePath, textToFind);
-            String[] ObjectData = str2.split("\\s+");
+            ObjectData = str2.split("\\s+");
             for (String data : ObjectData){
                 System.out.println(data);
             }
-        } catch (IOException e) {
+            BankAccount bankAccount2 = new BankAccount(ObjectData[0],Double.parseDouble(ObjectData[1]));
+            CreditCard creditCard2 = new CreditCard(bankAccount2, Long.parseLong(ObjectData[2]), Integer.parseInt(ObjectData[3]), Boolean.parseBoolean(ObjectData[4]));
+            System.out.println("Object data is: " + bankAccount2.getBankAccountID() + " " + bankAccount2.getAmountOfMoney() + " " + creditCard2.getCreditCardNumber() + " " + creditCard2.getPIN() + " " + creditCard2.getIsCreditCardBlocked());
+        }
+        catch (IOException e) {
             e.printStackTrace();
         }
+
+
 
         /* blueprint for checking date of blocked card
         LocalDateTime myDateObj = LocalDateTime.now();
