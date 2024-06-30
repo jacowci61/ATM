@@ -2,6 +2,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.StringJoiner;
 
 
 public class Main {
@@ -86,6 +87,11 @@ public class Main {
             for (String object : TempObject2) {
                 System.out.println("Before: " + object);
             }
+            StringJoiner joiner1 = new StringJoiner(" ");
+            for (String object : TempObject2) {
+                joiner1.add(object);
+            }
+
             TempObject2[1] = String.valueOf(4900.0);
             TempObject2[4] = String.valueOf(true); // setting that toggles ifcardisblocked
 
@@ -93,6 +99,24 @@ public class Main {
             for (String object : TempObject2) {
                 System.out.println("After: " + object);
             }
+
+            StringJoiner joiner = new StringJoiner(" ");
+            for (String object : TempObject2) {
+                joiner.add(object);
+            }
+            String originalString = joiner1.toString();
+            System.out.println("ORIGINAL STRING: " + originalString);
+            String replacementString = joiner.toString();
+            System.out.println("JOINED STRING: " + replacementString);
+
+            for (String line : lines) {
+                System.out.println("Lines in txt file are: " + line);
+            }
+            lines[IndexOfResult] = replacementString;
+            for (String line : lines) {
+                System.out.println("REPLACED lines in txt file are: " + line);
+            }
+
 
             creditCard1.setAmountOfMoney(Double.parseDouble(TempObject2[1]));
             creditCard1.setIsCreditCardBlocked(Boolean.valueOf(TempObject2[4]));
