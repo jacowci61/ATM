@@ -8,6 +8,9 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.io.IOException;
 import java.util.List;
+import java.io.BufferedReader;
+import java.io.FileReader;
+
 
 public class Main {
 
@@ -32,6 +35,8 @@ public class Main {
 
         String str1 = creditCard1.getBankAccountID() + " " + creditCard1.getAmountOfMoney() + " " + creditCard1.getCreditCardNumber() + " " + creditCard1.getPIN() + " " + creditCard1.getIsCreditCardBlocked();
 
+        /* writing to a file
+
         String contentToAppend = str1;
         try (FileWriter fileWriter = new FileWriter(filePath, true)) {
             fileWriter.write(System.lineSeparator() + contentToAppend);
@@ -39,6 +44,29 @@ public class Main {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        System.out.println(Long.toString(creditCard1.getCreditCardNumber()));
+        */
+
+        String textToFind = "4789522228948954";
+
+        try {
+            findLinesContainingText(filePath, textToFind);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void findLinesContainingText(String filePath, String textToFind) throws IOException {
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                if (line.contains(textToFind)) {
+                    System.out.println("Extracted line: " + line);
+                }
+            }
+        }
+
         /* blueprint for checking date of blocked card
         LocalDateTime myDateObj = LocalDateTime.now();
         DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
