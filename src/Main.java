@@ -56,9 +56,6 @@ public class Main {
                 System.out.println("Properties: " + object);
             }
 
-
-
-
             String query = "4789566628948954";
             String result = findElementContainingSequence(lines, query);
 
@@ -71,28 +68,6 @@ public class Main {
         catch (IOException e) {
             e.printStackTrace();
         }
-
-
-        // creating object from .txt file
-
-        System.out.println(Long.toString(creditCard1.getCreditCardNumber()));
-
-        String textToFind = "4789522228948954";
-        String[] ObjectData;
-        try {
-            String str2 = FindLineContainingText.findLineContainingText(filePath, textToFind);
-            ObjectData = str2.split("\\s+");
-            for (String data : ObjectData){
-                System.out.println(data);
-            }
-            BankAccount bankAccount2 = new BankAccount(ObjectData[0],Double.parseDouble(ObjectData[1]));
-            CreditCard creditCard2 = new CreditCard(bankAccount2, Long.parseLong(ObjectData[2]), Integer.parseInt(ObjectData[3]), Boolean.parseBoolean(ObjectData[4]));
-            System.out.println("Object data is: " + bankAccount2.getBankAccountID() + " " + bankAccount2.getAmountOfMoney() + " " + creditCard2.getCreditCardNumber() + " " + creditCard2.getPIN() + " " + creditCard2.getIsCreditCardBlocked());
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-
 
         /* blueprint for checking date of blocked card
 
@@ -115,41 +90,6 @@ public class Main {
             return linesList.toArray(new String[0]);
         }
 
-
-
-
-
-    // extracting line with specific creditcard number
-
-    public class FindLineContainingText {
-        public static void main(String[] args) {
-            String filePath = "example.txt";
-            String textToFind = "specific text";
-
-            try {
-                String matchingLine = findLineContainingText(filePath, textToFind);
-                if (matchingLine != null) {
-                    System.out.println("Matching line: " + matchingLine);
-                } else {
-                    System.out.println("No matching line found.");
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        public static String findLineContainingText(String filePath, String textToFind) throws IOException {
-            try (BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath))) {
-                String line;
-                while ((line = bufferedReader.readLine()) != null) {
-                    if (line.contains(textToFind)) {
-                        return line;
-                    }
-                }
-            }
-            return null; // Return null if no matching line is found
-        }
-    }
 
     public static String findElementContainingSequence(String[] data, String query) {
         for (String element : data) {
