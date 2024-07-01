@@ -64,6 +64,7 @@ public class Main {
             for (int i = 0; i < CreditCardsList.size(); i++) {
                 System.out.println(CreditCardsList.get(i).getCreditCardNumber());
             }
+
             String strTEST = lines[0];
             System.out.println("\n");
             System.out.println(strTEST);
@@ -78,7 +79,12 @@ public class Main {
 
 
             String query = "4111522263337445";
-            String result = findElementContainingSequence(lines, query);
+            CreditCard result = findElementContainingSequence(CreditCardsList, query);
+            System.out.println("Result is: " + result.getBankAccountID() + " " + result.getCreditCardNumber() + " " + result.getAmountOfMoney());
+            /* direct .txt data operations
+
+            String query = "4111522263337445";
+            String result = findElementContainingSequence(CreditCardsList, query);
             int IndexOfResult = Arrays.asList(lines).indexOf(result);
             System.out.println("Result is:" + result + "; and extraction is " + lines[IndexOfResult]);
             // unclear whether to directly modify object, skipping finding precise string from lines
@@ -144,6 +150,7 @@ public class Main {
             } else {
                 System.out.println("No matching element found.");
             }
+            */
 
 
             // problem here is that i dont replace data in lists
@@ -182,6 +189,17 @@ public class Main {
     }
 
 
+    public static CreditCard findElementContainingSequence(List<CreditCard> CreditCardsList, String query) {
+        for (CreditCard creditCard : CreditCardsList) {
+            if (String.valueOf(creditCard.getCreditCardNumber()).contains(query)) {
+                return creditCard;
+            }
+        }
+        return null;
+    }
+
+    /* this method was used for direct .txt search
+
     public static String findElementContainingSequence(String[] data, String query) {
         for (String element : data) {
             if (element.contains(query)) {
@@ -190,6 +208,7 @@ public class Main {
         }
         return null;
     }
+     */
 
     public static void overwriteFile(String filePath, String[] data) throws IOException {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
