@@ -31,4 +31,35 @@ public class WorkWithData {
             }
         }
     }
+
+    public static List<CreditCard> readStringArrayIntoObjectArray(String filePath) {
+
+
+        List<CreditCard> CreditCardsList = null;
+        try {
+            String[] lines = WorkWithData.readFileIntoArray(filePath);
+
+            System.out.println("\n");
+            CreditCardsList = new ArrayList<CreditCard>(lines.length);
+
+            for (String line : lines) {
+//              System.out.println("Lines in txt file are: " + line);
+                String[] TempObject = line.split("\\s+");
+                BankAccount data1 = new BankAccount(TempObject[0], Double.parseDouble(TempObject[1]));
+
+                CreditCard data2 = new CreditCard(data1, Long.parseLong(TempObject[2]), Integer.parseInt(TempObject[3]), Boolean.parseBoolean(TempObject[4]));
+                CreditCardsList.add(data2);
+            }
+
+            String query = "4789566628948954";
+            CreditCard result = WorkWithData.findElementContainingSequence(CreditCardsList, query);
+            int index = CreditCardsList.indexOf(result);
+            System.out.println("Result is: " + result.getBankAccountID() + " " + result.getCreditCardNumber() + " " + result.getAmountOfMoney() + " Index is: " + index);
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return CreditCardsList;
+    }
 }
