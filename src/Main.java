@@ -9,18 +9,20 @@ public class Main {
 
     public static void main(String[] args) {
 
+        /* previous tests how program reads .txt file
+
         File directory = new File("./");
         System.out.println("\n");
         System.out.println("path is: " + directory.getAbsolutePath());
 
         String filePath = "src/ATMData.txt";
-        String filePathTEST = "src/ATMDataTEST.txt";
+
 
         try (BufferedReader br = new BufferedReader(new FileReader(filePathTEST))) {
             String line;
             System.out.println("\n");
             while ((line = br.readLine()) != null) {
-                //System.out.println(line);
+                System.out.println(line);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -29,6 +31,7 @@ public class Main {
         CreditCard creditCard1 = new CreditCard(bankAccount1, 4111522263337444L, 1024, false);
 
         String str1 = creditCard1.getBankAccountID() + " " + creditCard1.getAmountOfMoney() + " " + creditCard1.getCreditCardNumber() + " " + creditCard1.getPIN() + " " + creditCard1.getIsCreditCardBlocked();
+        */
 
         /* appending content to .txt
 
@@ -40,6 +43,8 @@ public class Main {
             e.printStackTrace();
         }
         */
+
+        String filePathTEST = "src/ATMDataTEST.txt";
 
         try {
             String[] lines = readFileIntoArray(filePathTEST);
@@ -58,12 +63,18 @@ public class Main {
                 CreditCardsList.add(data2);
             }
 
+            /* test of arraylist with objects, note needed
+
+
             for (int i = 0; i < BankAccountsList.size(); i++) {
                 System.out.println(BankAccountsList.get(i).toString());
             }
             for (int i = 0; i < CreditCardsList.size(); i++) {
                 System.out.println(CreditCardsList.get(i).getCreditCardNumber());
             }
+            */
+
+            /* also a test of direct .txt data operations
 
             String strTEST = lines[0];
             System.out.println("\n");
@@ -73,14 +84,15 @@ public class Main {
             for (String object : TempObject) {
                 System.out.println("Properties: " + object);
             }
+             */
 
             //add reading user input here. Credit card number can be entered with spaces or not, doesnt matter.
             //use handling input from b64 converter/somewhere in other project on github
 
-
-            String query = "4111522263337445";
+            String query = "4789566628948954";
             CreditCard result = findElementContainingSequence(CreditCardsList, query);
-            System.out.println("Result is: " + result.getBankAccountID() + " " + result.getCreditCardNumber() + " " + result.getAmountOfMoney());
+            int index = CreditCardsList.indexOf(result);
+            System.out.println("Result is: " + result.getBankAccountID() + " " + result.getCreditCardNumber() + " " + result.getAmountOfMoney() + " Index is: " + index);
             /* direct .txt data operations
 
             String query = "4111522263337445";
@@ -152,12 +164,11 @@ public class Main {
             }
             */
 
-
             // problem here is that i dont replace data in lists
             // so, before calling a setter, find a string with creditcard number to be replaced and store rplcmnt = index of this string
             // .split("\\s+"), replace needed parameters of object, concat and replace lines[rplcmt] with newly concated string
-            creditCard1.setPIN(9876);
-            creditCard1.setCreditCardNumber(1111222233334444L);
+            //creditCard1.setPIN(9876);
+            //creditCard1.setCreditCardNumber(1111222233334444L);
             //String str2 = creditCard1.getBankAccountID() + " " + creditCard1.getAmountOfMoney() + " " + creditCard1.getCreditCardNumber() + " " + creditCard1.getPIN() + " " + creditCard1.getIsCreditCardBlocked();
             //System.out.println("\n" + str2);
 
