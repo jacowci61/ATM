@@ -13,6 +13,6 @@ public class Main {
     String filePath = "src/ATMDataTEST.txt";
 
     long UserCard = WorkWithData.readInputtedCreditCard();
-    ATM.Authorization(UserCard, filePath);
+    System.out.println(ATM.Authorization(UserCard, filePath));
     }
 }

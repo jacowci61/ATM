@@ -45,7 +45,7 @@ public class WorkWithData {
                 return creditCard;
             }
         }
-        return null;
+        return null; // TO FIX: throw error if element not found
     }
 
     public static void overwriteFile(String filePath, String[] data) throws IOException {

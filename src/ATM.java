@@ -1,11 +1,13 @@
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 public class ATM {
 
     public double CashAvailableInATM;
 
-    public static boolean Authorization(long CreditCardNumber, String filePath){
+    public static Map<CreditCard,Boolean> Authorization(long CreditCardNumber, String filePath){
 
         boolean UserIsAuthorized;
 
@@ -41,7 +43,10 @@ public class ATM {
         }
         //int index = CreditCardsList.indexOf(result);
         reader.close();
-        return UserIsAuthorized; // why return UserIsAuthorized if i can just block access to methods?
+
+        Map<CreditCard,Boolean> CreditCardMap = new HashMap<>();
+        CreditCardMap.put(result, UserIsAuthorized);
+        return CreditCardMap;
     }
 
     public void ChangeStateOfCreditCard(){
