@@ -10,8 +10,6 @@ public class Main {
     public static void main(String[] args) {
 
     String filePath = "src/ATMDataTEST.txt";
-//            WorkWithData.overwriteFile(filePathTEST, lines);
-//            System.out.println("\n");
-//            System.out.println("File overwritten successfully.");
+    System.out.println(WorkWithData.readStringArrayIntoObjectArray(filePath));
     }
 }
