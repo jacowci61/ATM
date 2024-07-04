@@ -13,6 +13,6 @@ public class Main {
     Map<String,Object> map = ATM.Authorization(UserCard, filePath);
     CreditCard retrievedCard = (CreditCard) map.get("credit card");
     boolean retrievedBool = (boolean) map.get("bool");
-    System.out.println(retrievedCard + " " + retrievedBool);
+    System.out.println(retrievedCard + " " + retrievedBool + " " + retrievedCard.getIsCreditCardBlocked());
     }
 }

@@ -38,6 +38,7 @@ public class ATM {
             else{
                 System.out.println("3 consequent incorrect PINs entered. Credit card blocked until *insert date here*");
                 UserIsAuthorized = false;
+                result.setIsCreditCardBlocked(true);
                 break;
             }
         }
@@ -50,19 +51,15 @@ public class ATM {
         return CreditCardMap;
     }
 
-    public void ChangeStateOfCreditCard(){
-    // used for blocking/unblocking access to credit card
-    }
-
-    public void CheckCardBalance(){
+    public void CheckCardBalance(CreditCard CreditCard, boolean UserIsAuthorized){
 
     }
 
-    public void CashoutFromCard(){
+    public void CashoutFromCard(CreditCard CreditCard, boolean UserIsAuthorized){
 
     }
 
-    public void AddMoneyToCard(){
+    public void AddMoneyToCard(CreditCard CreditCard, boolean UserIsAuthorized){
 
     }
 }
