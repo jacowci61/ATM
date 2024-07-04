@@ -1,9 +1,5 @@
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.StringJoiner;
-import java.util.Scanner;
+import java.util.*;
 
 
 public class Main {
@@ -13,6 +9,10 @@ public class Main {
     String filePath = "src/ATMDataTEST.txt";
 
     long UserCard = WorkWithData.readInputtedCreditCard();
-    System.out.println(ATM.Authorization(UserCard, filePath));
+
+    Map<String,Object> map = ATM.Authorization(UserCard, filePath);
+    CreditCard retrievedCard = (CreditCard) map.get("credit card");
+    boolean retrievedBool = (boolean) map.get("bool");
+    System.out.println(retrievedCard + " " + retrievedBool);
     }
 }

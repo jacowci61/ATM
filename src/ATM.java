@@ -7,7 +7,7 @@ public class ATM {
 
     public double CashAvailableInATM;
 
-    public static Map<CreditCard,Boolean> Authorization(long CreditCardNumber, String filePath){
+    public static Map<String,Object> Authorization(long CreditCardNumber, String filePath){
 
         boolean UserIsAuthorized;
 
@@ -44,8 +44,9 @@ public class ATM {
         //int index = CreditCardsList.indexOf(result);
         reader.close();
 
-        Map<CreditCard,Boolean> CreditCardMap = new HashMap<>();
-        CreditCardMap.put(result, UserIsAuthorized);
+        Map<String,Object> CreditCardMap = new HashMap<>();
+        CreditCardMap.put("credit card", result);
+        CreditCardMap.put("bool", UserIsAuthorized);
         return CreditCardMap;
     }
 
