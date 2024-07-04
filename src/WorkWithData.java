@@ -1,6 +1,7 @@
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class WorkWithData {
     public static String[] readFileIntoStringArray(String filePath) throws IOException {
@@ -32,13 +33,6 @@ public class WorkWithData {
                 CreditCard data2 = new CreditCard(data1, Long.parseLong(TempObject[2]), Integer.parseInt(TempObject[3]), Boolean.parseBoolean(TempObject[4]));
                 CreditCardsList.add(data2);
             }
-// delete this section of tests
-            String query = "4789566628948954";
-            CreditCard result = WorkWithData.findElementContainingSequence(CreditCardsList, query);
-            int index = CreditCardsList.indexOf(result);
-            System.out.println("Result is: " + result.getBankAccountID() + " " + result.getCreditCardNumber() + " " + result.getAmountOfMoney() + " Index is: " + index);
-// delete this section of tests
-
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -61,5 +55,14 @@ public class WorkWithData {
                 writer.newLine();
             }
         }
+    }
+
+    public static long readInputtedCreditCard(){
+        Scanner reader = new Scanner(System.in);
+        System.out.println("Enter a credit card number with or without spaces: ");
+        String RequestedCardtemp = reader.nextLine();
+        long RequestedCard = Long.parseLong(RequestedCardtemp);
+
+        return RequestedCard;
     }
 }

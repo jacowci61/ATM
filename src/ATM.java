@@ -5,7 +5,7 @@ public class ATM {
 
     public double CashAvailableInATM;
 
-    public boolean Authorization(long CreditCardNumber, int PIN, String filePath){
+    public static boolean Authorization(long CreditCardNumber, String filePath){
 
         boolean UserIsAuthorized;
 
@@ -17,6 +17,7 @@ public class ATM {
         int attempts;
         Scanner reader = new Scanner(System.in);
         System.out.println("Enter a PIN: ");
+        int PIN = reader.nextInt();
 
         while (true){
 
