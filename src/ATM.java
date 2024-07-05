@@ -84,25 +84,36 @@ public class ATM {
         double CardBalance = UserCreditCard.getAmountOfMoney();
 
         if (UserIsAuthorized == true){
-            Scanner reader = new Scanner(System.in);
-            System.out.println("\n Enter amount of money you want to cashout: ");
-            //string to double, so it can read even numbers like "100" without the "100.0"
-            Double CashoutValue = Double.parseDouble(reader.nextLine());
+            if (CardBalance == 0.0){
+                System.out.println("Creditcard balance is 0, you can't proceed with cashout.");
+            }
+            else{
+                Scanner reader = new Scanner(System.in);
+                System.out.println("\n Enter amount of money you want to cashout: ");
+                //string to double, so it can read even numbers like "100" without the "100.0"
+                Double CashoutValue = Double.parseDouble(reader.nextLine());
 
-            while (true){
-                if ((CashoutValue <= atm.getCashAvailableInATM()) && (CashoutValue <= CardBalance)){
-                    break;
+                while (true){
+                    if ((CashoutValue <= atm.getCashAvailableInATM()) && (CashoutValue <= CardBalance)){
+                        break;
+                    }
+                    else if (CashoutValue > atm.getCashAvailableInATM()){
+                        System.out.println("ATM doesn't have this amount of money, maximum amount is: "
+                                + atm.getCashAvailableInATM() + " Please select another value: ");
+                        CashoutValue = Double.parseDouble(reader.nextLine());
+                    }
+                    else if (CashoutValue > CardBalance){
+                        System.out.println("Creditcard doesn't have this amount of money, it's balance is: "
+                                + UserCreditCard.getAmountOfMoney() + " Please select another value: ");
+                        CashoutValue = Double.parseDouble(reader.nextLine());
+                    }
                 }
-                else if ((CashoutValue > atm.getCashAvailableInATM()) || (CashoutValue > CardBalance)){
-                    System.out.println("ATM doesn't have this amount of money, maximum amount is: "
-                            + atm.getCashAvailableInATM() + " Please select another value: ");
-                    CashoutValue = Double.parseDouble(reader.nextLine());
-                }
+
+                UserCreditCard.setAmountOfMoney(UserCreditCard.getAmountOfMoney() - CashoutValue);
+                atm.setATMBalance(atm.getCashAvailableInATM() - CashoutValue);
+                System.out.println("ATM balance: " + atm.getCashAvailableInATM() + ", Card balance: " + UserCreditCard.getAmountOfMoney());
             }
 
-            UserCreditCard.setAmountOfMoney(UserCreditCard.getAmountOfMoney() - CashoutValue);
-            atm.setATMBalance(atm.getCashAvailableInATM() - CashoutValue);
-            System.out.println("ATM balance: " + atm.getCashAvailableInATM() + ", Card balance: " + UserCreditCard.getAmountOfMoney());
         }
         else{
             System.out.println("Cannot cashout from card, card is blocked");
@@ -124,7 +135,7 @@ public class ATM {
                     break;
                 }
                 else if (AddMoneyToCardValue > 1000000.0){
-                    System.out.println("ATM doesn't support this amount of money, maximum amount is: 1000000"
+                    System.out.println("ATM doesn't support this amount of money, maximum amount is: 1 000 000."
                             + " Please select another value: ");
                     AddMoneyToCardValue = Double.parseDouble(reader.nextLine());
                 }

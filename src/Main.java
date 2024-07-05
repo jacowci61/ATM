@@ -13,34 +13,135 @@ public class Main {
         ATM atm = new ATM(cr1.getBankAccountID(), cr1.getAmountOfMoney());
         list.remove(0);
 
+        Scanner reader = new Scanner(System.in);
+        System.out.println("Enter a credit card number with or without spaces/dashes " +
+                "(for example '4333-5222-6999-7444','4333 5222 6999 7444' or '4333522269997444')");
+        String RequestedCardtemp = reader.nextLine();
+        String UserCard = WorkWithData.readInputtedCreditCard(RequestedCardtemp, false);
 
-        String UserCard = WorkWithData.readInputtedCreditCard();
-
-        Map<String,Object> map = ATM.Authorization(Long.parseLong(UserCard), filePath);
+        Map<String, Object> map = ATM.Authorization(Long.parseLong(UserCard), filePath);
 
         CreditCard retrievedCard = (CreditCard) map.get("credit card");
         boolean retrievedBool = (boolean) map.get("bool");
+        boolean ATMModeSelectedCorrectly = false;
+        boolean StartMessageDisplayed = false;
+        boolean ExitfromATM = false;
+        String ExitfromATMstr = "";
+        Scanner reader1 = new Scanner(System.in);
 
 
-        if (retrievedBool == true){
-            System.out.println("Balance value on this card: " + retrievedCard.getAmountOfMoney());
-            Scanner reader = new Scanner(System.in);
-            System.out.println("\n Enter 1 to cashout from card," +
-                    " enter 2 to add money to card: ");
-            int SelectOperation = reader.nextInt();
+        while ((ATMModeSelectedCorrectly == false) && (ExitfromATM == false)){
 
-            if (SelectOperation == 1){
-                ATM.CashoutFromCard(retrievedCard, retrievedBool, atm);
+            if (retrievedBool == true){
+
+                if (StartMessageDisplayed == false){
+                    System.out.println("\nEnter 1 to view balance of this card, " +
+                            "enter 2 to cashout money to card," + " enter 3 to add money to card: ");
+                    StartMessageDisplayed = true;
+                }
+
+                int SelectOperation = reader.nextInt();
+
+                if (SelectOperation == 1){
+
+                    System.out.println("Balance value on this card: " + retrievedCard.getAmountOfMoney());
+                    ATMModeSelectedCorrectly = true;
+                }
+                else if (SelectOperation == 2){
+                    ATM.CashoutFromCard(retrievedCard, retrievedBool, atm);
+                    ATMModeSelectedCorrectly = true;
+                }
+                else if (SelectOperation == 3){
+                    ATM.AddMoneyToCard(retrievedCard, retrievedBool, atm);
+                    ATMModeSelectedCorrectly = true;
+                }
+                else{
+                    System.out.println("You've selected incorrect mode of ATM. Supported ones are '1','2' or '3'. Please try again: ");
+                    SelectOperation = 0;
+                    SelectOperation = reader.nextInt();
+                }
             }
-            else if (SelectOperation == 2){
-                ATM.AddMoneyToCard(retrievedCard, retrievedBool, atm);
+            else{
+                System.out.println("\n Credit card is blocked, you don't have access to any ATM operations");
+                break;
             }
         }
-        else{
-            System.out.println("Credit card is blocked, you don't have access to any operations");
+
+        /* prototype with option to continue work with ATM
+
+        String ExitfromATMstr1 = "";
+        boolean ExitfromATMstr2 = false;
+        String[] boolarr = new String[1];
+        while ((ATMModeSelectedCorrectly == false) && (ExitfromATMstr2 == false)){
+            ExitfromATMstr2 = Boolean.valueOf(ExitfromATMstr1);
+            System.out.println("STR2: " + ExitfromATMstr2);
+            if (retrievedBool == true){
+                if (StartMessageDisplayed == false){
+                    System.out.println("\nEnter 1 to view balance of this card, " +
+                            "enter 2 to cashout money to card," + " enter 3 to add money to card: ");
+                    StartMessageDisplayed = true;
+                }
+                ExitfromATMstr1 = boolarr[0];
+                System.out.println("STR1: " + ExitfromATMstr1);
+                int SelectOperation = reader.nextInt();
+
+                if (SelectOperation == 1){
+
+                    System.out.println("Balance value on this card: " + retrievedCard.getAmountOfMoney());
+                    ATMModeSelectedCorrectly = true;
+
+                    System.out.println("Do you wish to exit ATM? Type 'y' to exit ATM, type 'n' to continue: ");
+                    ExitfromATMstr = reader1.nextLine();
+                    if (ExitfromATMstr.equals("y")){
+                        ExitfromATM = true;
+                    }
+                    else if (ExitfromATMstr.equals("n")){
+                        ExitfromATM = false;
+                    }
+                    boolarr[0] = String.valueOf(ExitfromATM);
+                    System.out.println("Boolarr: " + boolarr[0]);
+                }
+                else if (SelectOperation == 2){
+                    ATM.CashoutFromCard(retrievedCard, retrievedBool, atm);
+                    ATMModeSelectedCorrectly = true;
+
+                    System.out.println("Do you wish to exit ATM? Type 'y' to exit ATM, type 'n' to continue: ");
+                    ExitfromATMstr = reader1.nextLine();
+                    if (ExitfromATMstr.equals("y")){
+                        ExitfromATM = true;
+                    }
+                    else if (ExitfromATMstr.equals("n")){
+                        ExitfromATM = false;
+                    }
+                    boolarr[0] = String.valueOf(ExitfromATM);
+                    System.out.println("Boolarr: " + boolarr[0]);
+                }
+                else if (SelectOperation == 3){
+                    ATM.AddMoneyToCard(retrievedCard, retrievedBool, atm);
+                    ATMModeSelectedCorrectly = true;
+
+                    System.out.println("Do you wish to exit ATM? Type 'y' to exit ATM, type 'n' to continue: ");
+                    ExitfromATMstr = reader1.nextLine();
+                    if (ExitfromATMstr.equals("y")){
+                        ExitfromATM = true;
+                    }
+                    else if (ExitfromATMstr.equals("n")){
+                        ExitfromATM = false;
+                    }
+                    boolarr[0] = String.valueOf(ExitfromATM);
+                    System.out.println("Boolarr: " + boolarr[0]);
+                }
+                else{
+                    System.out.println("You've selected incorrect mode of ATM. Supported ones are '1','2' or '3'. Please try again: ");
+                    SelectOperation = 0;
+                    SelectOperation = reader.nextInt();
+                }
+            }
+            else{
+                System.out.println("\n Credit card is blocked, you don't have access to any operations");
+                break;
+            }
         }
-
-
-        //ATM.HandleCardBalance(ATM.CheckCardBalance(retrievedCard, retrievedBool));
+         */
     }
 }

@@ -15,7 +15,6 @@ public class WorkWithData {
         return linesList.toArray(new String[0]);
     }
 
-
     public static List<CreditCard> readStringArrayIntoObjectArray(String filePath) {
 
         List<CreditCard> CreditCardsList = null;
@@ -42,7 +41,7 @@ public class WorkWithData {
                     String[] TempObject = line.split("\\s+");
                     BankAccount data1 = new BankAccount(TempObject[0], Double.parseDouble(TempObject[1]));
 
-                    CreditCard data2 = new CreditCard(data1, Long.parseLong(TempObject[2]), Integer.parseInt(TempObject[3]), Boolean.parseBoolean(TempObject[4]));
+                    CreditCard data2 = new CreditCard(data1, Long.parseLong(readInputtedCreditCard(TempObject[2],true)), Integer.parseInt(TempObject[3]), Boolean.parseBoolean(TempObject[4]));
                     CreditCardsList.add(data2);
                 }
             }
@@ -70,34 +69,62 @@ public class WorkWithData {
         }
     }
 
-    public static String readInputtedCreditCard(){
+    public static String readInputtedCreditCard(String RequestedCardtemp, boolean IsFromFile){
         Scanner reader = new Scanner(System.in);
-        System.out.println("Enter a credit card number with or without spaces/dashes (for example '4333-5222-6999-7444' or '4333 5222 6999 7444')");
-        String RequestedCardtemp = reader.nextLine();
         String[] rq1;
         boolean a1 = true;
-
-        while(a1){
-            rq1 = RequestedCardtemp.split("[ -]");
-            RequestedCardtemp = "";
-            for (String line : rq1){
-                RequestedCardtemp += line;
-            }
-            System.out.println(RequestedCardtemp);
-            if (RequestedCardtemp.length() == 16){
-                a1 = false;
-            }
-            else{
-                RequestedCardtemp = "";
-                rq1 = null;
-                System.out.println("Incorrect creditcard number entered. Enter a correct 16-number creditcard number: ");
-
-                RequestedCardtemp = reader.nextLine();
+        if (IsFromFile == false){
+            while(a1){
                 rq1 = RequestedCardtemp.split("[ -]");
-
                 RequestedCardtemp = "";
                 for (String line : rq1){
                     RequestedCardtemp += line;
+                }
+                if (RequestedCardtemp.length() == 16){
+                    a1 = false;
+                }
+                else{
+                    RequestedCardtemp = "";
+                    rq1 = null;
+                    System.out.println("Incorrect creditcard number entered. Enter a correct 16-number creditcard number: ");
+
+                    RequestedCardtemp = reader.nextLine();
+                    rq1 = RequestedCardtemp.split("[ -]");
+
+                    RequestedCardtemp = "";
+                    for (String line : rq1){
+                        RequestedCardtemp += line;
+                    }
+                }
+            }
+        }
+        else if (IsFromFile == true){
+            while(a1){
+                rq1 = RequestedCardtemp.split("[ -]");
+                RequestedCardtemp = "";
+                for (String line : rq1){
+                    RequestedCardtemp += line;
+                }
+                if (RequestedCardtemp.length() == 16){
+                    a1 = false;
+                }
+                else{
+                    System.out.println("Error in reading .txt file");
+                    //write handling smh. Maybe through optional parameters of this method, idk
+                    /*
+                    RequestedCardtemp = "";
+                    rq1 = null;
+                    System.out.println("Incorrect creditcard number entered. Enter a correct 16-number creditcard number: ");
+
+                    RequestedCardtemp = reader.nextLine();
+                    rq1 = RequestedCardtemp.split("[ -]");
+
+                    RequestedCardtemp = "";
+                    for (String line : rq1){
+                        RequestedCardtemp += line;
+                    }
+
+                     */
                 }
             }
         }
