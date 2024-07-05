@@ -59,11 +59,24 @@ public class ATM {
 
     public static void CashoutFromCard(CreditCard UserCreditCard, boolean UserIsAuthorized){
         double CardBalance = UserCreditCard.getAmountOfMoney();
+
         if (UserIsAuthorized == true){
             Scanner reader = new Scanner(System.in);
             System.out.println("\n Enter amount of money you want to cashout: ");
             //string to double, so it can read even numbers like "100" without the "100.0"
             Double CashoutValue = Double.parseDouble(reader.nextLine());
+
+            while (true){
+                if ((CashoutValue <= CashAvailableInATM) && (CashoutValue <= CardBalance)){
+                    break;
+                }
+                else if ((CashoutValue > CashAvailableInATM) || (CashoutValue > CardBalance)){
+                    System.out.println("ATM doesn't have this amount of money, maximum amount is: "
+                            + CashAvailableInATM + " Please select another value: ");
+                    CashoutValue = Double.parseDouble(reader.nextLine());
+                }
+            }
+
             UserCreditCard.setAmountOfMoney(UserCreditCard.getAmountOfMoney() - CashoutValue);
             CashAvailableInATM = CashAvailableInATM - CashoutValue;
             System.out.println("ATM balance: " + CashAvailableInATM + ", Card balance: " + UserCreditCard.getAmountOfMoney());
@@ -75,11 +88,25 @@ public class ATM {
 
     public static void AddMoneyToCard(CreditCard UserCreditCard, boolean UserIsAuthorized){
         double CardBalance = UserCreditCard.getAmountOfMoney();
+
         if (UserIsAuthorized == true){
+
             Scanner reader = new Scanner(System.in);
             System.out.println("\n Enter amount of money you want to add to your balance: ");
             //string to double, so it can read even numbers like "100" without the "100.0"
             Double AddMoneyToCardValue = Double.parseDouble(reader.nextLine());
+
+            while (true){
+                if (AddMoneyToCardValue <= 1000000.0){
+                    break;
+                }
+                else if (AddMoneyToCardValue > 1000000.0){
+                    System.out.println("ATM doesn't support this amount of money, maximum amount is: 1000000"
+                            + " Please select another value: ");
+                    AddMoneyToCardValue = Double.parseDouble(reader.nextLine());
+                }
+            }
+
             UserCreditCard.setAmountOfMoney(UserCreditCard.getAmountOfMoney() + AddMoneyToCardValue);
             CashAvailableInATM = CashAvailableInATM + AddMoneyToCardValue;
             System.out.println("ATM balance: " + CashAvailableInATM + ", Card balance: " + UserCreditCard.getAmountOfMoney());
