@@ -1,17 +1,14 @@
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 public class ATM {
 
-    public double CashAvailableInATM;
+    public double CashAvailableInATM = 100000.0;
 
-    public static Map<String,Object> Authorization(long CreditCardNumber, String filePath){
+    public static Map<String,Object> Authorization(long UserCreditCard, String filePath){
 
         boolean UserIsAuthorized;
 
-        String query = String.valueOf(CreditCardNumber);
+        String query = String.valueOf(UserCreditCard);
         List<CreditCard> CreditCardsList = WorkWithData.readStringArrayIntoObjectArray(filePath);
         CreditCard result = WorkWithData.findElementContainingSequence(CreditCardsList, query);
         int RequiredPIN = result.getPIN();
@@ -51,15 +48,46 @@ public class ATM {
         return CreditCardMap;
     }
 
-    public void CheckCardBalance(CreditCard CreditCard, boolean UserIsAuthorized){
-
+    public static OptionalDouble CheckCardBalance(CreditCard UserCreditCard, boolean UserIsAuthorized){
+        double CardBalance = UserCreditCard.getAmountOfMoney();
+        if (UserIsAuthorized == true){
+            return OptionalDouble.of(CardBalance);
+        }
+        else{
+            System.out.println("Cannot check card balance, card is blocked");
+            return OptionalDouble.empty();
+        }
     }
 
-    public void CashoutFromCard(CreditCard CreditCard, boolean UserIsAuthorized){
-
+    public static OptionalDouble CashoutFromCard(CreditCard UserCreditCard, boolean UserIsAuthorized){
+        double CardBalance = UserCreditCard.getAmountOfMoney();
+        if (UserIsAuthorized == true){
+            return OptionalDouble.of(CardBalance);
+        }
+        else{
+            System.out.println("Cannot cashout from card, card is blocked");
+            return OptionalDouble.empty();
+        }
     }
 
-    public void AddMoneyToCard(CreditCard CreditCard, boolean UserIsAuthorized){
+    public static OptionalDouble AddMoneyToCard(CreditCard UserCreditCard, boolean UserIsAuthorized){
+        double CardBalance = UserCreditCard.getAmountOfMoney();
+        if (UserIsAuthorized == true){
+            return OptionalDouble.of(CardBalance);
+        }
+        else{
+            System.out.println("Cannot add money to card, card is blocked");
+            return OptionalDouble.empty();
+        }
+    }
 
+    public static void HandleCardBalance(OptionalDouble CardBalance){
+        try {
+            double balanceOrThrow = CardBalance.orElseThrow(() -> new IllegalStateException("Card is blocked"));
+            System.out.println("Card balance: " + balanceOrThrow);
+        }
+        catch (IllegalStateException e) {
+            System.out.println(e.getMessage());
+        }
     }
 }

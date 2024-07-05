@@ -14,5 +14,7 @@ public class Main {
     CreditCard retrievedCard = (CreditCard) map.get("credit card");
     boolean retrievedBool = (boolean) map.get("bool");
     System.out.println(retrievedCard + " " + retrievedBool + " " + retrievedCard.getIsCreditCardBlocked());
+
+    ATM.HandleCardBalance(ATM.CheckCardBalance(retrievedCard, retrievedBool));
     }
 }
