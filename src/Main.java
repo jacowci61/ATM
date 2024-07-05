@@ -67,6 +67,9 @@ public class Main {
             }
         }
 
+
+        String[] list1 = WorkWithData.readObjectArrayIntoStringArray(list,atm);
+        WorkWithData.overwriteFile(filePath, list1);
         /* prototype with option to continue work with ATM
 
         String ExitfromATMstr1 = "";

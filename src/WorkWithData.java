@@ -21,7 +21,6 @@ public class WorkWithData {
         try {
             String[] lines = WorkWithData.readFileIntoStringArray(filePath);
 
-            System.out.println("\n");
             CreditCardsList = new ArrayList<CreditCard>(lines.length);
 
             boolean firstIteration = true;
@@ -51,6 +50,29 @@ public class WorkWithData {
         return CreditCardsList;
     }
 
+    public static String[] readObjectArrayIntoStringArray(List<CreditCard> list, ATM atmInstance) {
+        List<CreditCard> CreditCardsList = list;
+        ATM atm = atmInstance;
+        BankAccount atmElement1 = new BankAccount(atm.getATMID(), atm.getCashAvailableInATM());
+        CreditCard atmElement = new CreditCard(atmElement1, 0, 0, false);
+        list.add(0, atmElement);
+        list.add(0, atmElement);
+        String[] lines = new String[list.size()];
+        for (int i = 0; i <= lines.length; ++i) {
+            if (i == 0){
+                String line = CreditCardsList.get(i).getBankAccountID() + " " +  CreditCardsList.get(i).getAmountOfMoney();
+                lines[i] = line;
+            }
+            else{
+                String line = CreditCardsList.get(i).getBankAccountID() + " " +  CreditCardsList.get(i).getAmountOfMoney() + " " +
+                        CreditCardsList.get(i).getCreditCardNumber() + " " + CreditCardsList.get(i).getPIN() + " " +
+                        CreditCardsList.get(i).getIsCreditCardBlocked();
+                lines[i] = line;
+            }
+        }
+        return lines;
+    }
+
     public static CreditCard findElementContainingSequence(List<CreditCard> CreditCardsList, String query) {
         for (CreditCard creditCard : CreditCardsList) {
             if (String.valueOf(creditCard.getCreditCardNumber()).contains(query)) {
@@ -60,11 +82,15 @@ public class WorkWithData {
         return null; // TO FIX: throw error if element not found
     }
 
-    public static void overwriteFile(String filePath, String[] data) throws IOException {
+    public static void overwriteFile(String filePath, String[] list) throws IOException {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
-            for (String line : data) {
-                writer.write(line);
-                writer.newLine();
+            try {
+                for (String line : list) {
+                    writer.write(line);
+                    writer.newLine();
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
         }
     }
