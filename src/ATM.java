@@ -2,7 +2,30 @@ import java.util.*;
 
 public class ATM {
 
-    public static double CashAvailableInATM = 100000.0;
+    private double CashAvailableInATM;
+    private String ATMID;
+
+    public ATM(String ATM, double CashAvailableInATM){
+        this.ATMID = ATM;
+        this.CashAvailableInATM = CashAvailableInATM;
+    }
+
+    public void setCashAvailableInATM(double getCashAvailableInATM){
+        this.CashAvailableInATM = CashAvailableInATM;
+    }
+
+    public double getCashAvailableInATM(){
+        return CashAvailableInATM;
+    }
+
+    public void setATMID(String ATM){
+        this.ATMID = ATM;
+    }
+
+    public String getATMID(){
+        return ATMID;
+    }
+
 
     public static Map<String,Object> Authorization(long UserCreditCard, String filePath){
 
@@ -57,7 +80,7 @@ public class ATM {
         }
     }
 
-    public static void CashoutFromCard(CreditCard UserCreditCard, boolean UserIsAuthorized){
+    public static void CashoutFromCard(CreditCard UserCreditCard, boolean UserIsAuthorized, ATM atm){
         double CardBalance = UserCreditCard.getAmountOfMoney();
 
         if (UserIsAuthorized == true){
@@ -67,26 +90,26 @@ public class ATM {
             Double CashoutValue = Double.parseDouble(reader.nextLine());
 
             while (true){
-                if ((CashoutValue <= CashAvailableInATM) && (CashoutValue <= CardBalance)){
+                if ((CashoutValue <= atm.getCashAvailableInATM()) && (CashoutValue <= CardBalance)){
                     break;
                 }
-                else if ((CashoutValue > CashAvailableInATM) || (CashoutValue > CardBalance)){
+                else if ((CashoutValue > atm.getCashAvailableInATM()) || (CashoutValue > CardBalance)){
                     System.out.println("ATM doesn't have this amount of money, maximum amount is: "
-                            + CashAvailableInATM + " Please select another value: ");
+                            + atm.getCashAvailableInATM() + " Please select another value: ");
                     CashoutValue = Double.parseDouble(reader.nextLine());
                 }
             }
 
             UserCreditCard.setAmountOfMoney(UserCreditCard.getAmountOfMoney() - CashoutValue);
-            CashAvailableInATM = CashAvailableInATM - CashoutValue;
-            System.out.println("ATM balance: " + CashAvailableInATM + ", Card balance: " + UserCreditCard.getAmountOfMoney());
+            atm.setATMBalance(atm.getCashAvailableInATM() - CashoutValue);
+            System.out.println("ATM balance: " + atm.getCashAvailableInATM() + ", Card balance: " + UserCreditCard.getAmountOfMoney());
         }
         else{
             System.out.println("Cannot cashout from card, card is blocked");
         }
     }
 
-    public static void AddMoneyToCard(CreditCard UserCreditCard, boolean UserIsAuthorized){
+    public static void AddMoneyToCard(CreditCard UserCreditCard, boolean UserIsAuthorized, ATM atm){
         double CardBalance = UserCreditCard.getAmountOfMoney();
 
         if (UserIsAuthorized == true){
@@ -108,8 +131,8 @@ public class ATM {
             }
 
             UserCreditCard.setAmountOfMoney(UserCreditCard.getAmountOfMoney() + AddMoneyToCardValue);
-            CashAvailableInATM = CashAvailableInATM + AddMoneyToCardValue;
-            System.out.println("ATM balance: " + CashAvailableInATM + ", Card balance: " + UserCreditCard.getAmountOfMoney());
+            atm.setATMBalance(atm.getCashAvailableInATM() + AddMoneyToCardValue);
+            System.out.println("ATM balance: " + atm.getCashAvailableInATM() + ", Card balance: " + UserCreditCard.getAmountOfMoney());
         }
         else{
             System.out.println("Cannot add money to card, card is blocked");

@@ -15,8 +15,8 @@ public class WorkWithData {
         return linesList.toArray(new String[0]);
     }
 
-    public static List<CreditCard> readStringArrayIntoObjectArray(String filePath) {
 
+    public static List<CreditCard> readStringArrayIntoObjectArray(String filePath) {
 
         List<CreditCard> CreditCardsList = null;
         try {
@@ -25,13 +25,26 @@ public class WorkWithData {
             System.out.println("\n");
             CreditCardsList = new ArrayList<CreditCard>(lines.length);
 
+            boolean firstIteration = true;
             for (String line : lines) {
-//              System.out.println("Lines in txt file are: " + line);
-                String[] TempObject = line.split("\\s+");
-                BankAccount data1 = new BankAccount(TempObject[0], Double.parseDouble(TempObject[1]));
+                if (firstIteration){
+                    String[] TempObject = line.split("\\s+");
+                    ATM Atm = new ATM(TempObject[0],Double.parseDouble(TempObject[1]));
+                    BankAccount data1 = new BankAccount(TempObject[0], Double.parseDouble(TempObject[1]));
 
-                CreditCard data2 = new CreditCard(data1, Long.parseLong(TempObject[2]), Integer.parseInt(TempObject[3]), Boolean.parseBoolean(TempObject[4]));
-                CreditCardsList.add(data2);
+                    firstIteration = false;
+
+                    CreditCard data2 = new CreditCard(data1, 1L, 3897, true);
+                    CreditCardsList.add(data2);
+                }
+                else{
+                    //System.out.println("Lines in txt file are: " + line);
+                    String[] TempObject = line.split("\\s+");
+                    BankAccount data1 = new BankAccount(TempObject[0], Double.parseDouble(TempObject[1]));
+
+                    CreditCard data2 = new CreditCard(data1, Long.parseLong(TempObject[2]), Integer.parseInt(TempObject[3]), Boolean.parseBoolean(TempObject[4]));
+                    CreditCardsList.add(data2);
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
