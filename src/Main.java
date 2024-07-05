@@ -8,14 +8,15 @@ public class Main {
 
         String filePath = "src/ATMDataTEST.txt";
         List<CreditCard> list = WorkWithData.readStringArrayIntoObjectArray(filePath);
+
         CreditCard cr1 = list.getFirst();
         ATM atm = new ATM(cr1.getBankAccountID(), cr1.getAmountOfMoney());
         list.remove(0);
 
 
-        long UserCard = WorkWithData.readInputtedCreditCard();
+        String UserCard = WorkWithData.readInputtedCreditCard();
 
-        Map<String,Object> map = ATM.Authorization(UserCard, filePath);
+        Map<String,Object> map = ATM.Authorization(Long.parseLong(UserCard), filePath);
 
         CreditCard retrievedCard = (CreditCard) map.get("credit card");
         boolean retrievedBool = (boolean) map.get("bool");

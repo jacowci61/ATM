@@ -70,12 +70,40 @@ public class WorkWithData {
         }
     }
 
-    public static long readInputtedCreditCard(){
+    public static String readInputtedCreditCard(){
         Scanner reader = new Scanner(System.in);
-        System.out.println("Enter a credit card number with or without spaces: ");
+        System.out.println("Enter a credit card number with or without spaces/dashes (for example '4333-5222-6999-7444' or '4333 5222 6999 7444')");
         String RequestedCardtemp = reader.nextLine();
-        long RequestedCard = Long.parseLong(RequestedCardtemp);
+        String[] rq1;
+        boolean a1 = true;
 
-        return RequestedCard;
+        while(a1){
+            rq1 = RequestedCardtemp.split("[ -]");
+            RequestedCardtemp = "";
+            for (String line : rq1){
+                RequestedCardtemp += line;
+            }
+            System.out.println(RequestedCardtemp);
+            if (RequestedCardtemp.length() == 16){
+                a1 = false;
+            }
+            else{
+                RequestedCardtemp = "";
+                rq1 = null;
+                System.out.println("Incorrect creditcard number entered. Enter a correct 16-number creditcard number: ");
+
+                RequestedCardtemp = reader.nextLine();
+                rq1 = RequestedCardtemp.split("[ -]");
+
+                RequestedCardtemp = "";
+                for (String line : rq1){
+                    RequestedCardtemp += line;
+                }
+            }
+        }
+
+        //long RequestedCard = Long.parseLong(RequestedCardtemp);
+        //return RequestedCard;
+        return RequestedCardtemp;
     }
 }
