@@ -60,7 +60,13 @@ public class ATM {
     public static void CashoutFromCard(CreditCard UserCreditCard, boolean UserIsAuthorized){
         double CardBalance = UserCreditCard.getAmountOfMoney();
         if (UserIsAuthorized == true){
-            //return OptionalDouble.of(CardBalance);
+            Scanner reader = new Scanner(System.in);
+            System.out.println("\n Enter amount of money you want to cashout: ");
+            //string to double, so it can read even numbers like "100" without the "100.0"
+            Double CashoutValue = Double.parseDouble(reader.nextLine());
+            UserCreditCard.setAmountOfMoney(UserCreditCard.getAmountOfMoney() - CashoutValue);
+            CashAvailableInATM = CashAvailableInATM - CashoutValue;
+            System.out.println("ATM balance: " + CashAvailableInATM + ", Card balance: " + UserCreditCard.getAmountOfMoney());
         }
         else{
             System.out.println("Cannot cashout from card, card is blocked");
@@ -70,13 +76,25 @@ public class ATM {
     public static void AddMoneyToCard(CreditCard UserCreditCard, boolean UserIsAuthorized){
         double CardBalance = UserCreditCard.getAmountOfMoney();
         if (UserIsAuthorized == true){
-            //return OptionalDouble.of(CardBalance);
+            Scanner reader = new Scanner(System.in);
+            System.out.println("\n Enter amount of money you want to add to your balance: ");
+            //string to double, so it can read even numbers like "100" without the "100.0"
+            Double AddMoneyToCardValue = Double.parseDouble(reader.nextLine());
+            UserCreditCard.setAmountOfMoney(UserCreditCard.getAmountOfMoney() + AddMoneyToCardValue);
+            CashAvailableInATM = CashAvailableInATM + AddMoneyToCardValue;
+            System.out.println("ATM balance: " + CashAvailableInATM + ", Card balance: " + UserCreditCard.getAmountOfMoney());
         }
         else{
             System.out.println("Cannot add money to card, card is blocked");
         }
     }
 
+    public double getATMBalance(){
+        return CashAvailableInATM;
+    }
+    public void setATMBalance(double NewValueOfCashAvailableInATM){
+        CashAvailableInATM = NewValueOfCashAvailableInATM;
+    }
     /*
     public static void HandleCardBalance(OptionalDouble CardBalance){
         try {
