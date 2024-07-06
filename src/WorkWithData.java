@@ -55,10 +55,11 @@ public class WorkWithData {
         ATM atm = atmInstance;
         BankAccount atmElement1 = new BankAccount(atm.getATMID(), atm.getCashAvailableInATM());
         CreditCard atmElement = new CreditCard(atmElement1, 0, 0, false);
-        list.add(0, atmElement);
+
         list.add(0, atmElement);
         String[] lines = new String[list.size()];
-        for (int i = 0; i <= lines.length; ++i) {
+
+        for (int i = 0; i < lines.length; ++i) {
             if (i == 0){
                 String line = CreditCardsList.get(i).getBankAccountID() + " " +  CreditCardsList.get(i).getAmountOfMoney();
                 lines[i] = line;

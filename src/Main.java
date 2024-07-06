@@ -7,11 +7,14 @@ public class Main {
     public static void main(String[] args) throws IOException {
 
         String filePath = "src/ATMDataTEST.txt";
+        String filePath2 = "src/ATMData.txt";
         List<CreditCard> list = WorkWithData.readStringArrayIntoObjectArray(filePath);
 
         CreditCard cr1 = list.getFirst();
         ATM atm = new ATM(cr1.getBankAccountID(), cr1.getAmountOfMoney());
+        System.out.println(list.get(0).getAmountOfMoney());
         list.remove(0);
+        System.out.println(list.get(0).getAmountOfMoney());
 
         Scanner reader = new Scanner(System.in);
         System.out.println("Enter a credit card number with or without spaces/dashes " +
@@ -22,6 +25,8 @@ public class Main {
         Map<String, Object> map = ATM.Authorization(Long.parseLong(UserCard), filePath);
 
         CreditCard retrievedCard = (CreditCard) map.get("credit card");
+        int index = list.indexOf(retrievedCard);
+        System.out.println("Index:" +  index);
         boolean retrievedBool = (boolean) map.get("bool");
         boolean ATMModeSelectedCorrectly = false;
         boolean StartMessageDisplayed = false;
@@ -39,7 +44,7 @@ public class Main {
                             "enter 2 to cashout money to card," + " enter 3 to add money to card: ");
                     StartMessageDisplayed = true;
                 }
-
+                System.out.println(retrievedCard.getAmountOfMoney());
                 int SelectOperation = reader.nextInt();
 
                 if (SelectOperation == 1){
@@ -48,11 +53,12 @@ public class Main {
                     ATMModeSelectedCorrectly = true;
                 }
                 else if (SelectOperation == 2){
-                    ATM.CashoutFromCard(retrievedCard, retrievedBool, atm);
+                    retrievedCard = ATM.CashoutFromCard(retrievedCard, retrievedBool, atm);
                     ATMModeSelectedCorrectly = true;
                 }
                 else if (SelectOperation == 3){
-                    ATM.AddMoneyToCard(retrievedCard, retrievedBool, atm);
+                    retrievedCard = ATM.AddMoneyToCard(retrievedCard, retrievedBool, atm);
+                    System.out.println(retrievedCard.getAmountOfMoney());
                     ATMModeSelectedCorrectly = true;
                 }
                 else{
@@ -69,7 +75,7 @@ public class Main {
 
 
         String[] list1 = WorkWithData.readObjectArrayIntoStringArray(list,atm);
-        WorkWithData.overwriteFile(filePath, list1);
+        WorkWithData.overwriteFile(filePath2, list1);
         /* prototype with option to continue work with ATM
 
         String ExitfromATMstr1 = "";

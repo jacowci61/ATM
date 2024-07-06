@@ -80,7 +80,7 @@ public class ATM {
         }
     }
 
-    public static void CashoutFromCard(CreditCard UserCreditCard, boolean UserIsAuthorized, ATM atm){
+    public static CreditCard CashoutFromCard(CreditCard UserCreditCard, boolean UserIsAuthorized, ATM atm){
         double CardBalance = UserCreditCard.getAmountOfMoney();
 
         if (UserIsAuthorized == true){
@@ -108,19 +108,19 @@ public class ATM {
                         CashoutValue = Double.parseDouble(reader.nextLine());
                     }
                 }
-
-                UserCreditCard.setAmountOfMoney(UserCreditCard.getAmountOfMoney() - CashoutValue);
+                UserCreditCard.changeBalance(UserCreditCard.getAmountOfMoney()-CashoutValue);
                 atm.setATMBalance(atm.getCashAvailableInATM() - CashoutValue);
                 System.out.println("ATM balance: " + atm.getCashAvailableInATM() + ", Card balance: " + UserCreditCard.getAmountOfMoney());
+                return UserCreditCard;
             }
-
         }
         else{
             System.out.println("Cannot cashout from card, card is blocked");
         }
+        return UserCreditCard;
     }
 
-    public static void AddMoneyToCard(CreditCard UserCreditCard, boolean UserIsAuthorized, ATM atm){
+    public static CreditCard AddMoneyToCard(CreditCard UserCreditCard, boolean UserIsAuthorized, ATM atm){
         double CardBalance = UserCreditCard.getAmountOfMoney();
 
         if (UserIsAuthorized == true){
@@ -141,13 +141,15 @@ public class ATM {
                 }
             }
 
-            UserCreditCard.setAmountOfMoney(UserCreditCard.getAmountOfMoney() + AddMoneyToCardValue);
+            UserCreditCard.changeBalance(UserCreditCard.getAmountOfMoney() + AddMoneyToCardValue);
             atm.setATMBalance(atm.getCashAvailableInATM() + AddMoneyToCardValue);
             System.out.println("ATM balance: " + atm.getCashAvailableInATM() + ", Card balance: " + UserCreditCard.getAmountOfMoney());
+            return UserCreditCard;
         }
         else{
             System.out.println("Cannot add money to card, card is blocked");
         }
+        return UserCreditCard;
     }
 
     public double getATMBalance(){

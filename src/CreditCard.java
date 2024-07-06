@@ -22,6 +22,9 @@ public class CreditCard extends BankAccount {
     public void setIsCreditCardBlocked(Boolean IsCreditCardBlocked){
         this.IsCreditCardBlocked = IsCreditCardBlocked;
     }
+    public void changeBalance(double amount) {
+        setAmountOfMoney(amount);
+    }
 
     public long getCreditCardNumber(){
         return CreditCardNumber;
