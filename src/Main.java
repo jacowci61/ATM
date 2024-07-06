@@ -70,6 +70,7 @@ public class Main {
             }
             else{
                 System.out.println("\n Credit card is blocked, you don't have access to any ATM operations");
+                list.set(index, retrievedCard);
                 break;
             }
         }
