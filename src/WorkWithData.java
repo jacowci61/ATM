@@ -1,7 +1,5 @@
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class WorkWithData {
     public static String[] readFileIntoStringArray(String filePath) throws IOException {
@@ -74,10 +72,13 @@ public class WorkWithData {
         return lines;
     }
 
-    public static CreditCard findElementContainingSequence(List<CreditCard> CreditCardsList, String query) {
+    public static Map<String,Object> findElementContainingSequence(List<CreditCard> CreditCardsList, String query) {
         for (CreditCard creditCard : CreditCardsList) {
             if (String.valueOf(creditCard.getCreditCardNumber()).contains(query)) {
-                return creditCard;
+                Map<String,Object> CreditCardAndIndexMap = new HashMap<>();
+                CreditCardAndIndexMap.put("credit card", creditCard);
+                CreditCardAndIndexMap.put("index", CreditCardsList.indexOf(creditCard));
+                return CreditCardAndIndexMap;
             }
         }
         return null; // TO FIX: throw error if element not found

@@ -25,7 +25,7 @@ public class Main {
         Map<String, Object> map = ATM.Authorization(Long.parseLong(UserCard), filePath);
 
         CreditCard retrievedCard = (CreditCard) map.get("credit card");
-        int index = list.indexOf(retrievedCard);
+        int index = (Integer) WorkWithData.findElementContainingSequence(list, UserCard).get("index");
         System.out.println("Index:" +  index);
         boolean retrievedBool = (boolean) map.get("bool");
         boolean ATMModeSelectedCorrectly = false;
@@ -48,16 +48,17 @@ public class Main {
                 int SelectOperation = reader.nextInt();
 
                 if (SelectOperation == 1){
-
                     System.out.println("Balance value on this card: " + retrievedCard.getAmountOfMoney());
                     ATMModeSelectedCorrectly = true;
                 }
                 else if (SelectOperation == 2){
                     retrievedCard = ATM.CashoutFromCard(retrievedCard, retrievedBool, atm);
+                    list.set(index, retrievedCard);
                     ATMModeSelectedCorrectly = true;
                 }
                 else if (SelectOperation == 3){
                     retrievedCard = ATM.AddMoneyToCard(retrievedCard, retrievedBool, atm);
+                    list.set(index, retrievedCard);
                     System.out.println(retrievedCard.getAmountOfMoney());
                     ATMModeSelectedCorrectly = true;
                 }

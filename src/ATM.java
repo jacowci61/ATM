@@ -33,7 +33,7 @@ public class ATM {
 
         String query = String.valueOf(UserCreditCard);
         List<CreditCard> CreditCardsList = WorkWithData.readStringArrayIntoObjectArray(filePath);
-        CreditCard result = WorkWithData.findElementContainingSequence(CreditCardsList, query);
+        CreditCard result = (CreditCard) WorkWithData.findElementContainingSequence(CreditCardsList, query).get("credit card");
         int RequiredPIN = result.getPIN();
         int i = 1;
         int attempts;
