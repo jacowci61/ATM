@@ -168,4 +168,16 @@ public class WorkWithData {
         //return RequestedCard;
         return RequestedCardtemp;
     }
+
+    public static boolean blockTimeExceeded(CreditCard creditCard){
+        boolean blockTimeExceeded;
+        if (LocalDateTime.now().isAfter(creditCard.getDate()))
+        {
+            blockTimeExceeded = true;
+        }
+        else{
+            blockTimeExceeded = false;
+        }
+        return blockTimeExceeded;
+    }
 }

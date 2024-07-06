@@ -1,3 +1,6 @@
+import java.time.LocalDate;
+import java.time.Month;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class ATM {
@@ -29,44 +32,61 @@ public class ATM {
 
     public static Map<String,Object> Authorization(long UserCreditCard, String filePath){
 
-        boolean UserIsAuthorized;
+        boolean UserIsAuthorized = false;
+        boolean CardUnlocked = false;
 
         String query = String.valueOf(UserCreditCard);
         List<CreditCard> CreditCardsList = WorkWithData.readStringArrayIntoObjectArray(filePath);
         CreditCard result = (CreditCard) WorkWithData.findElementContainingSequence(CreditCardsList, query).get("credit card");
-        int RequiredPIN = result.getPIN();
-        int i = 1;
-        int attempts;
-        Scanner reader = new Scanner(System.in);
-        System.out.println("Enter a PIN: ");
-        int PIN = reader.nextInt();
-
-        while (true){
-
-            if (PIN == RequiredPIN){
-                System.out.println("Correct PIN entered.");
-                UserIsAuthorized = true;
-                break;
-            }
-            else if ((PIN != RequiredPIN) && (i < 3)){
-                attempts = 3 - i;
-                System.out.println("Incorrect PIN entered. You have " +  attempts + " attempt(s) left.");
-                System.out.println("Enter a PIN: ");
-                PIN = reader.nextInt();
-                i = ++i;
-            }
-            else{
-                System.out.println("3 consequent incorrect PINs entered. Credit card blocked until *insert date here*");
-                UserIsAuthorized = false;
-                result.setIsCreditCardBlocked(true);
-                break;
-            }
-        }
-        //int index = CreditCardsList.indexOf(result);
-
         Map<String,Object> CreditCardMap = new HashMap<>();
-        CreditCardMap.put("credit card", result);
-        CreditCardMap.put("bool", UserIsAuthorized);
+
+        if ((result.getIsCreditCardBlocked() == true) && (WorkWithData.blockTimeExceeded(result) == true)){
+            result.setIsCreditCardBlocked(false);
+            result.setDate(LocalDate.of(1970, Month.JANUARY, 1).atStartOfDay());
+            CardUnlocked = true;
+            System.out.println("Your card is now unlocked.");
+        }
+        else if ((result.getIsCreditCardBlocked() == true) && (WorkWithData.blockTimeExceeded(result) != true)){
+            System.out.println("Your card is still blocked. It will be unblocked at " + result.getDate().plusDays(1).plusSeconds(1).format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")));
+            CreditCardMap.put("credit card", result);
+            CreditCardMap.put("bool", UserIsAuthorized);
+            return CreditCardMap;
+        }
+        if ((result.getIsCreditCardBlocked() == false) || (CardUnlocked == true)) {
+            int RequiredPIN = result.getPIN();
+            int i = 1;
+            int attempts;
+            Scanner reader = new Scanner(System.in);
+            System.out.println("Enter a PIN: ");
+            int PIN = reader.nextInt();
+
+            while (true){
+
+                if (PIN == RequiredPIN){
+                    System.out.println("Correct PIN entered.");
+                    UserIsAuthorized = true;
+                    break;
+                }
+                else if ((PIN != RequiredPIN) && (i < 3)){
+                    attempts = 3 - i;
+                    System.out.println("Incorrect PIN entered. You have " +  attempts + " attempt(s) left.");
+                    System.out.println("Enter a PIN: ");
+                    PIN = reader.nextInt();
+                    i = ++i;
+                }
+                else{
+                    System.out.println("3 consequent incorrect PINs entered. Credit card blocked until *insert date here*");
+                    UserIsAuthorized = false;
+                    result.setIsCreditCardBlocked(true);
+                    break;
+                }
+            }
+            //int index = CreditCardsList.indexOf(result);
+
+            CreditCardMap.put("credit card", result);
+            CreditCardMap.put("bool", UserIsAuthorized);
+            return CreditCardMap;
+        }
         return CreditCardMap;
     }
 

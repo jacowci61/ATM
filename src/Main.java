@@ -37,7 +37,7 @@ public class Main {
 
         CreditCard retrievedCard = (CreditCard) map.get("credit card");
         int index = (Integer) WorkWithData.findElementContainingSequence(list, UserCard).get("index");
-        System.out.println("Index:" +  index);
+
         boolean retrievedBool = (boolean) map.get("bool");
         boolean ATMModeSelectedCorrectly = false;
         boolean StartMessageDisplayed = false;
@@ -94,6 +94,7 @@ public class Main {
 
         String[] list1 = WorkWithData.readObjectArrayIntoStringArray(list,atm);
         WorkWithData.overwriteFile(filePath2, list1);
+
 
         /* prototype with option to continue work with ATM
 
