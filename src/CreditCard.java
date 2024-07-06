@@ -1,16 +1,20 @@
+import java.time.LocalDateTime;
+
 public class CreditCard extends BankAccount {
 
     private long CreditCardNumber;
     private int PIN;
     private int AmountOfIncorrectPINsEntered;
     private boolean IsCreditCardBlocked = false;
+    private LocalDateTime localDateTime;
     //private storing data of blocking
 
-    public CreditCard(BankAccount bankAccount, long CreditCardNumber, int PIN, boolean IsCreditCardBlocked){
+    public CreditCard(BankAccount bankAccount, long CreditCardNumber, int PIN, boolean IsCreditCardBlocked, LocalDateTime localDateTime){
         super(bankAccount.getBankAccountID(), bankAccount.getAmountOfMoney());
         this.CreditCardNumber = CreditCardNumber;
         this.PIN = PIN;
         this.IsCreditCardBlocked = IsCreditCardBlocked;
+        this.localDateTime = localDateTime;
     }
 
     public void setCreditCardNumber(long CreditCardNumber){
@@ -34,5 +38,12 @@ public class CreditCard extends BankAccount {
     }
     public boolean getIsCreditCardBlocked(){
         return IsCreditCardBlocked;
+    }
+    public void setDate(LocalDateTime localDateTime) {
+        this.localDateTime = localDateTime;
+    }
+
+    public LocalDateTime getDate(){
+        return localDateTime;
     }
 }

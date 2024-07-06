@@ -1,4 +1,6 @@
 import java.io.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class WorkWithData {
@@ -29,16 +31,19 @@ public class WorkWithData {
                     BankAccount data1 = new BankAccount(TempObject[0], Double.parseDouble(TempObject[1]));
 
                     firstIteration = false;
+                    String tempDate = "01-01-1970 00:00:00";
+                    LocalDateTime myDateObj = LocalDateTime.parse(tempDate, DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"));
 
-                    CreditCard data2 = new CreditCard(data1, 1L, 3897, true);
+                    CreditCard data2 = new CreditCard(data1, 1L, 3897, true, myDateObj);
                     CreditCardsList.add(data2);
                 }
                 else{
                     //System.out.println("Lines in txt file are: " + line);
                     String[] TempObject = line.split("\\s+");
                     BankAccount data1 = new BankAccount(TempObject[0], Double.parseDouble(TempObject[1]));
-
-                    CreditCard data2 = new CreditCard(data1, Long.parseLong(readInputtedCreditCard(TempObject[2],true)), Integer.parseInt(TempObject[3]), Boolean.parseBoolean(TempObject[4]));
+                    String tempDate = TempObject[5] + " " + TempObject[6];
+                    LocalDateTime myDateObj = LocalDateTime.parse(tempDate, DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"));
+                    CreditCard data2 = new CreditCard(data1, Long.parseLong(readInputtedCreditCard(TempObject[2],true)), Integer.parseInt(TempObject[3]), Boolean.parseBoolean(TempObject[4]), myDateObj);
                     CreditCardsList.add(data2);
                 }
             }
@@ -49,10 +54,12 @@ public class WorkWithData {
     }
 
     public static String[] readObjectArrayIntoStringArray(List<CreditCard> list, ATM atmInstance) {
+        String tempDate = "01-01-1970 00:00:00";
+        LocalDateTime myDateObj = LocalDateTime.parse(tempDate, DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"));
         List<CreditCard> CreditCardsList = list;
         ATM atm = atmInstance;
         BankAccount atmElement1 = new BankAccount(atm.getATMID(), atm.getCashAvailableInATM());
-        CreditCard atmElement = new CreditCard(atmElement1, 0, 0, false);
+        CreditCard atmElement = new CreditCard(atmElement1, 0, 0, false, myDateObj);
 
         list.add(0, atmElement);
         String[] lines = new String[list.size()];
@@ -65,7 +72,7 @@ public class WorkWithData {
             else{
                 String line = CreditCardsList.get(i).getBankAccountID() + " " +  CreditCardsList.get(i).getAmountOfMoney() + " " +
                         CreditCardsList.get(i).getCreditCardNumber() + " " + CreditCardsList.get(i).getPIN() + " " +
-                        CreditCardsList.get(i).getIsCreditCardBlocked();
+                        CreditCardsList.get(i).getIsCreditCardBlocked() + " " + CreditCardsList.get(i).getDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"));
                 lines[i] = line;
             }
         }

@@ -1,10 +1,21 @@
 import java.io.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 
 public class Main {
 
     public static void main(String[] args) throws IOException {
+
+        /*
+        LocalDateTime myDateObj = LocalDateTime.now();
+        DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+        String formattedDate = myDateObj.format(myFormatObj);
+        System.out.println("Current date: " + formattedDate);
+        System.out.println(myDateObj.getClass());
+
+         */
 
         String filePath = "src/ATMDataTEST.txt";
         String filePath2 = "src/ATMData.txt";
@@ -70,6 +81,11 @@ public class Main {
             }
             else{
                 System.out.println("\n Credit card is blocked, you don't have access to any ATM operations");
+                LocalDateTime myDateObj = LocalDateTime.now();
+                DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+                String formattedDate = myDateObj.format(myFormatObj);
+                LocalDateTime myDateObj1 = LocalDateTime.parse(formattedDate, DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"));
+                retrievedCard.setDate(myDateObj1);
                 list.set(index, retrievedCard);
                 break;
             }
@@ -78,6 +94,7 @@ public class Main {
 
         String[] list1 = WorkWithData.readObjectArrayIntoStringArray(list,atm);
         WorkWithData.overwriteFile(filePath2, list1);
+
         /* prototype with option to continue work with ATM
 
         String ExitfromATMstr1 = "";
