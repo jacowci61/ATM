@@ -8,169 +8,92 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
 
-        /*
-        LocalDateTime myDateObj = LocalDateTime.now();
-        DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
-        String formattedDate = myDateObj.format(myFormatObj);
-        System.out.println("Current date: " + formattedDate);
-        System.out.println(myDateObj.getClass());
-
-         */
-
         String filePath = "src/ATMDataTEST.txt";
         String filePath2 = "src/ATMData.txt";
-        List<CreditCard> list = WorkWithData.readStringArrayIntoObjectArray(filePath);
+        List<CreditCard> listOfCreditCards = WorkWithData.readStringArrayIntoObjectArray(filePath);
 
-        CreditCard cr1 = list.getFirst();
-        ATM atm = new ATM(cr1.getBankAccountID(), cr1.getAmountOfMoney());
-        System.out.println(list.get(0).getAmountOfMoney());
-        list.remove(0);
-        System.out.println(list.get(0).getAmountOfMoney());
+        //region Reading ATM data
+        // here ATM data gets extracted from  CreditCards list. ATM data is stored in 1st line of .txt file
+        // (and stored as first object in CreditCards list too), so at first we store ATM data as CreditCard object in list,
+        //  but then extract values here
+
+        CreditCard ATMDataAsCreditCard = listOfCreditCards.getFirst(); // get first element from list
+        ATM atm = new ATM(ATMDataAsCreditCard.getBankAccountID(), ATMDataAsCreditCard.getAmountOfMoney()); // get ATM values
+        listOfCreditCards.remove(0); // delete first object as it's represents ATM data and not credit card data
+        //endregion
 
         Scanner reader = new Scanner(System.in);
         System.out.println("Enter a credit card number with or without spaces/dashes " +
                 "(for example '4333-5222-6999-7444','4333 5222 6999 7444' or '4333522269997444')");
-        String RequestedCardtemp = reader.nextLine();
-        String UserCard = WorkWithData.readInputtedCreditCard(RequestedCardtemp, false);
+        String tempRequestedCard = reader.nextLine(); // temp because it won't be used more than once
+        String userRequestedCard = WorkWithData.readInputtedCreditCard(tempRequestedCard, false); // pass tempRequestedCard to method in order to handle it in case of errors during input
 
-        Map<String, Object> map = ATM.Authorization(Long.parseLong(UserCard), filePath);
+        Map<String, Object> creditCardObjectAndItsIndex = ATM.creditCardAuthorization(Long.parseLong(userRequestedCard), filePath);
 
-        CreditCard retrievedCard = (CreditCard) map.get("credit card");
-        int index = (Integer) WorkWithData.findElementContainingSequence(list, UserCard).get("index");
+        CreditCard retrievedCard = (CreditCard) creditCardObjectAndItsIndex.get("credit card");
+        int retrievedCardIndex = (Integer) WorkWithData.findCreditCardByNumber(listOfCreditCards, userRequestedCard).get("index");
 
-        boolean retrievedBool = (boolean) map.get("bool");
+        boolean retrievedBool = (boolean) creditCardObjectAndItsIndex.get("bool");
         boolean ATMModeSelectedCorrectly = false;
-        boolean StartMessageDisplayed = false;
-        boolean ExitfromATM = false;
-        String ExitfromATMstr = "";
-        Scanner reader1 = new Scanner(System.in);
+        boolean startMessageDisplayed = false;
+        boolean exitFromATM = false;
 
 
-        while ((ATMModeSelectedCorrectly == false) && (ExitfromATM == false)){
+        while ((ATMModeSelectedCorrectly == false) && (exitFromATM == false)){
 
             if (retrievedBool == true){
 
-                if (StartMessageDisplayed == false){
+                if (startMessageDisplayed == false){
                     System.out.println("\nEnter 1 to view balance of this card, " +
                             "enter 2 to cashout money to card," + " enter 3 to add money to card: ");
-                    StartMessageDisplayed = true;
+                    startMessageDisplayed = true;
                 }
-                System.out.println(retrievedCard.getAmountOfMoney());
-                int SelectOperation = reader.nextInt();
-
-                if (SelectOperation == 1){
-                    System.out.println("Balance value on this card: " + retrievedCard.getAmountOfMoney());
-                    ATMModeSelectedCorrectly = true;
-                }
-                else if (SelectOperation == 2){
-                    retrievedCard = ATM.CashoutFromCard(retrievedCard, retrievedBool, atm);
-                    list.set(index, retrievedCard);
-                    ATMModeSelectedCorrectly = true;
-                }
-                else if (SelectOperation == 3){
-                    retrievedCard = ATM.AddMoneyToCard(retrievedCard, retrievedBool, atm);
-                    list.set(index, retrievedCard);
-                    System.out.println(retrievedCard.getAmountOfMoney());
-                    ATMModeSelectedCorrectly = true;
-                }
-                else{
-                    System.out.println("You've selected incorrect mode of ATM. Supported ones are '1','2' or '3'. Please try again: ");
-                    SelectOperation = 0;
-                    SelectOperation = reader.nextInt();
-                }
-            }
-            else{
-                System.out.println("\n Credit card is blocked, you don't have access to any ATM operations");
-                LocalDateTime myDateObj = LocalDateTime.now();
-                DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
-                String formattedDate = myDateObj.format(myFormatObj);
-                LocalDateTime myDateObj1 = LocalDateTime.parse(formattedDate, DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"));
-                retrievedCard.setDate(myDateObj1);
-                list.set(index, retrievedCard);
-                break;
-            }
-        }
-
-
-        String[] list1 = WorkWithData.readObjectArrayIntoStringArray(list,atm);
-        WorkWithData.overwriteFile(filePath2, list1);
-
-
-        /* prototype with option to continue work with ATM
-
-        String ExitfromATMstr1 = "";
-        boolean ExitfromATMstr2 = false;
-        String[] boolarr = new String[1];
-        while ((ATMModeSelectedCorrectly == false) && (ExitfromATMstr2 == false)){
-            ExitfromATMstr2 = Boolean.valueOf(ExitfromATMstr1);
-            System.out.println("STR2: " + ExitfromATMstr2);
-            if (retrievedBool == true){
-                if (StartMessageDisplayed == false){
-                    System.out.println("\nEnter 1 to view balance of this card, " +
-                            "enter 2 to cashout money to card," + " enter 3 to add money to card: ");
-                    StartMessageDisplayed = true;
-                }
-                ExitfromATMstr1 = boolarr[0];
-                System.out.println("STR1: " + ExitfromATMstr1);
                 int SelectOperation = reader.nextInt();
 
                 if (SelectOperation == 1){
 
                     System.out.println("Balance value on this card: " + retrievedCard.getAmountOfMoney());
                     ATMModeSelectedCorrectly = true;
-
-                    System.out.println("Do you wish to exit ATM? Type 'y' to exit ATM, type 'n' to continue: ");
-                    ExitfromATMstr = reader1.nextLine();
-                    if (ExitfromATMstr.equals("y")){
-                        ExitfromATM = true;
-                    }
-                    else if (ExitfromATMstr.equals("n")){
-                        ExitfromATM = false;
-                    }
-                    boolarr[0] = String.valueOf(ExitfromATM);
-                    System.out.println("Boolarr: " + boolarr[0]);
                 }
                 else if (SelectOperation == 2){
-                    ATM.CashoutFromCard(retrievedCard, retrievedBool, atm);
-                    ATMModeSelectedCorrectly = true;
 
-                    System.out.println("Do you wish to exit ATM? Type 'y' to exit ATM, type 'n' to continue: ");
-                    ExitfromATMstr = reader1.nextLine();
-                    if (ExitfromATMstr.equals("y")){
-                        ExitfromATM = true;
-                    }
-                    else if (ExitfromATMstr.equals("n")){
-                        ExitfromATM = false;
-                    }
-                    boolarr[0] = String.valueOf(ExitfromATM);
-                    System.out.println("Boolarr: " + boolarr[0]);
+                    // displaying balance despite not selecting operation "1" is used due to program exit after any operation is complete
+                    System.out.println("Balance value on this card: " + retrievedCard.getAmountOfMoney());
+                    retrievedCard = ATM.cashoutFromCreditCard(retrievedCard, retrievedBool, atm);
+                    listOfCreditCards.set(retrievedCardIndex, retrievedCard);
+                    ATMModeSelectedCorrectly = true;
                 }
                 else if (SelectOperation == 3){
-                    ATM.AddMoneyToCard(retrievedCard, retrievedBool, atm);
-                    ATMModeSelectedCorrectly = true;
 
-                    System.out.println("Do you wish to exit ATM? Type 'y' to exit ATM, type 'n' to continue: ");
-                    ExitfromATMstr = reader1.nextLine();
-                    if (ExitfromATMstr.equals("y")){
-                        ExitfromATM = true;
-                    }
-                    else if (ExitfromATMstr.equals("n")){
-                        ExitfromATM = false;
-                    }
-                    boolarr[0] = String.valueOf(ExitfromATM);
-                    System.out.println("Boolarr: " + boolarr[0]);
+                    // displaying balance despite not selecting operation "1" is used due to program exit after any operation is complete
+                    System.out.println("Balance value on this card: " + retrievedCard.getAmountOfMoney());
+                    retrievedCard = ATM.addMoneyToCreditCard(retrievedCard, retrievedBool, atm);
+                    listOfCreditCards.set(retrievedCardIndex, retrievedCard);
+                    ATMModeSelectedCorrectly = true;
                 }
                 else{
+
                     System.out.println("You've selected incorrect mode of ATM. Supported ones are '1','2' or '3'. Please try again: ");
                     SelectOperation = 0;
                     SelectOperation = reader.nextInt();
                 }
             }
             else{
-                System.out.println("\n Credit card is blocked, you don't have access to any operations");
+
+                System.out.println("Credit card is blocked, you don't have access to any ATM operations");
+
+                LocalDateTime currentDateTime = LocalDateTime.now();
+                DateTimeFormatter formatOfDate = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+                String formattedDate = currentDateTime.format(formatOfDate);
+                LocalDateTime formattedDateOfBlock = LocalDateTime.parse(formattedDate, DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"));
+                retrievedCard.setDate(formattedDateOfBlock);
+
+                listOfCreditCards.set(retrievedCardIndex, retrievedCard);
                 break;
             }
         }
-         */
+
+        String[] list1 = WorkWithData.readObjectArrayIntoStringArray(listOfCreditCards,atm);
+        WorkWithData.overwriteFileWithStringArray(filePath2, list1);
     }
 }

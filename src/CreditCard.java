@@ -2,48 +2,53 @@ import java.time.LocalDateTime;
 
 public class CreditCard extends BankAccount {
 
-    private long CreditCardNumber;
+    private long creditCardID;
     private int PIN;
-    private int AmountOfIncorrectPINsEntered;
-    private boolean IsCreditCardBlocked = false;
+    private boolean isCreditCardBlocked = false;
     private LocalDateTime localDateTime;
-    //private storing data of blocking
 
-    public CreditCard(BankAccount bankAccount, long CreditCardNumber, int PIN, boolean IsCreditCardBlocked, LocalDateTime localDateTime){
+    public CreditCard(BankAccount bankAccount, long creditCardID, int PIN, boolean isCreditCardBlocked, LocalDateTime localDateTime){
         super(bankAccount.getBankAccountID(), bankAccount.getAmountOfMoney());
-        this.CreditCardNumber = CreditCardNumber;
+        this.creditCardID = creditCardID;
         this.PIN = PIN;
-        this.IsCreditCardBlocked = IsCreditCardBlocked;
+        this.isCreditCardBlocked = isCreditCardBlocked;
         this.localDateTime = localDateTime;
     }
 
-    public void setCreditCardNumber(long CreditCardNumber){
-        this.CreditCardNumber = CreditCardNumber;
+    public void setCreditCardID(long creditCardNumber){
+        this.creditCardID = creditCardNumber;
     }
+
     public void setPIN(int PIN){
         this.PIN = PIN;
     }
-    public void setIsCreditCardBlocked(Boolean IsCreditCardBlocked){
-        this.IsCreditCardBlocked = IsCreditCardBlocked;
-    }
-    public void changeBalance(double amount) {
-        setAmountOfMoney(amount);
+
+    public void setIsCreditCardBlocked(Boolean isCreditCardBlocked){
+        this.isCreditCardBlocked = isCreditCardBlocked;
     }
 
-    public long getCreditCardNumber(){
-        return CreditCardNumber;
+    public void setCreditCardBalance(double amount) {
+        setAmountOfMoneyOnBankAccount(amount);
     }
-    public int getPIN(){
-        return PIN;
-    }
-    public boolean getIsCreditCardBlocked(){
-        return IsCreditCardBlocked;
-    }
+
     public void setDate(LocalDateTime localDateTime) {
         this.localDateTime = localDateTime;
     }
 
-    public LocalDateTime getDate(){
+
+    public long getCreditCardID(){
+        return creditCardID;
+    }
+
+    public int getCreditCardPIN(){
+        return PIN;
+    }
+
+    public boolean getIsCreditCardBlocked(){
+        return isCreditCardBlocked;
+    }
+
+    public LocalDateTime getDateOfCreditCardBlock(){
         return localDateTime;
     }
 }

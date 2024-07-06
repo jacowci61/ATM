@@ -1,192 +1,180 @@
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class ATM {
 
-    private double CashAvailableInATM;
+    private double cashAvailableInATM;
     private String ATMID;
 
-    public ATM(String ATM, double CashAvailableInATM){
+    public ATM(String ATM, double cashAvailableInATM){
         this.ATMID = ATM;
-        this.CashAvailableInATM = CashAvailableInATM;
+        this.cashAvailableInATM = cashAvailableInATM;
     }
 
-    public void setCashAvailableInATM(double getCashAvailableInATM){
-        this.CashAvailableInATM = CashAvailableInATM;
-    }
-
-    public double getCashAvailableInATM(){
-        return CashAvailableInATM;
-    }
-
-    public void setATMID(String ATM){
-        this.ATMID = ATM;
-    }
 
     public String getATMID(){
         return ATMID;
     }
 
+    public double getCashAvailableInATM(){
+        return cashAvailableInATM;
+    }
 
-    public static Map<String,Object> Authorization(long UserCreditCard, String filePath){
+
+    public void setATMID(String ATM){
+        this.ATMID = ATM;
+    }
+
+    public void setATMBalance(double newValueOfCashAvailableInATM){
+        cashAvailableInATM = newValueOfCashAvailableInATM;
+    }
+
+
+    public static Map<String,Object> creditCardAuthorization(long userCreditCard, String filePath){
 
         boolean UserIsAuthorized = false;
-        boolean CardUnlocked = false;
+        boolean cardUnlocked = false;
 
-        String query = String.valueOf(UserCreditCard);
+        Map<String,Object> creditCardObjectAndAuthorizationPermission = new HashMap<>();
+
+        String requestedCreditCard = String.valueOf(userCreditCard);
+
         List<CreditCard> CreditCardsList = WorkWithData.readStringArrayIntoObjectArray(filePath);
-        CreditCard result = (CreditCard) WorkWithData.findElementContainingSequence(CreditCardsList, query).get("credit card");
-        Map<String,Object> CreditCardMap = new HashMap<>();
+        CreditCard result = (CreditCard) WorkWithData.findCreditCardByNumber(CreditCardsList, requestedCreditCard).get("credit card");
 
-        if ((result.getIsCreditCardBlocked() == true) && (WorkWithData.blockTimeExceeded(result) == true)){
+        if ((result.getIsCreditCardBlocked() == true) && (WorkWithData.isCreditCardBlockTimeExceeded(result) == true)){
+
             result.setIsCreditCardBlocked(false);
             result.setDate(LocalDate.of(1970, Month.JANUARY, 1).atStartOfDay());
-            CardUnlocked = true;
-            System.out.println("Your card is now unlocked.");
+            cardUnlocked = true;
+            System.out.println("24h since last block are passed, your card is now unlocked.");
         }
-        else if ((result.getIsCreditCardBlocked() == true) && (WorkWithData.blockTimeExceeded(result) != true)){
-            System.out.println("Your card is still blocked. It will be unblocked at " + result.getDate().plusDays(1).plusSeconds(1).format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")));
-            CreditCardMap.put("credit card", result);
-            CreditCardMap.put("bool", UserIsAuthorized);
-            return CreditCardMap;
+        else if ((result.getIsCreditCardBlocked() == true) && (WorkWithData.isCreditCardBlockTimeExceeded(result) != true)){
+
+            System.out.println("Your card is still blocked. It will be unblocked at " +
+                    result.getDateOfCreditCardBlock().plusDays(1).plusSeconds(1).format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")));
+            creditCardObjectAndAuthorizationPermission.put("credit card", result);
+            creditCardObjectAndAuthorizationPermission.put("bool", UserIsAuthorized);
+            return creditCardObjectAndAuthorizationPermission;
         }
-        if ((result.getIsCreditCardBlocked() == false) || (CardUnlocked == true)) {
-            int RequiredPIN = result.getPIN();
+        if ((result.getIsCreditCardBlocked() == false) || (cardUnlocked == true)) {
+
+            int requiredPIN = result.getCreditCardPIN();
             int i = 1;
             int attempts;
+
             Scanner reader = new Scanner(System.in);
             System.out.println("Enter a PIN: ");
-            int PIN = reader.nextInt();
+            int inputtedPIN = reader.nextInt();
 
             while (true){
 
-                if (PIN == RequiredPIN){
-                    System.out.println("Correct PIN entered.");
+                if (inputtedPIN == requiredPIN){
+                    System.out.println("Correct PIN entered. You can proceed with ATM operations.");
                     UserIsAuthorized = true;
                     break;
                 }
-                else if ((PIN != RequiredPIN) && (i < 3)){
+                else if ((inputtedPIN != requiredPIN) && (i < 3)){
                     attempts = 3 - i;
                     System.out.println("Incorrect PIN entered. You have " +  attempts + " attempt(s) left.");
                     System.out.println("Enter a PIN: ");
-                    PIN = reader.nextInt();
+                    inputtedPIN = reader.nextInt();
                     i = ++i;
                 }
                 else{
-                    System.out.println("3 consequent incorrect PINs entered. Credit card blocked until *insert date here*");
+                    System.out.println("3 consequent incorrect PINs entered. Credit card blocked until "
+                            + LocalDateTime.now().plusDays(1).format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")));
                     UserIsAuthorized = false;
                     result.setIsCreditCardBlocked(true);
                     break;
                 }
             }
-            //int index = CreditCardsList.indexOf(result);
 
-            CreditCardMap.put("credit card", result);
-            CreditCardMap.put("bool", UserIsAuthorized);
-            return CreditCardMap;
+            creditCardObjectAndAuthorizationPermission.put("credit card", result);
+            creditCardObjectAndAuthorizationPermission.put("bool", UserIsAuthorized);
+            return creditCardObjectAndAuthorizationPermission;
         }
-        return CreditCardMap;
+        return creditCardObjectAndAuthorizationPermission;
     }
 
-    public static void CheckCardBalance(CreditCard UserCreditCard, boolean UserIsAuthorized){
-        double CardBalance = UserCreditCard.getAmountOfMoney();
-        if (UserIsAuthorized == true){
-            System.out.println("Card balance is: " + CardBalance);
-        }
-        else{
-            System.out.println("Cannot check card balance, card is blocked");
-        }
-    }
+    public static CreditCard cashoutFromCreditCard(CreditCard userCreditCard, boolean userIsAuthorized, ATM atm){
+        double creditCardAmountOfMoney = userCreditCard.getAmountOfMoney();
 
-    public static CreditCard CashoutFromCard(CreditCard UserCreditCard, boolean UserIsAuthorized, ATM atm){
-        double CardBalance = UserCreditCard.getAmountOfMoney();
+        if (userIsAuthorized == true){
 
-        if (UserIsAuthorized == true){
-            if (CardBalance == 0.0){
+            if (creditCardAmountOfMoney == 0.0){
                 System.out.println("Creditcard balance is 0, you can't proceed with cashout.");
             }
             else{
+
                 Scanner reader = new Scanner(System.in);
-                System.out.println("\n Enter amount of money you want to cashout: ");
-                //string to double, so it can read even numbers like "100" without the "100.0"
-                Double CashoutValue = Double.parseDouble(reader.nextLine());
+                System.out.println("Enter amount of money you want to cashout: ");
+
+                Double cashoutValue = Double.parseDouble(reader.nextLine()); // string to double, so it can read even numbers like "100" without ".0" at the end
 
                 while (true){
-                    if ((CashoutValue <= atm.getCashAvailableInATM()) && (CashoutValue <= CardBalance)){
+
+                    if ((cashoutValue <= atm.getCashAvailableInATM()) && (cashoutValue <= creditCardAmountOfMoney)){
                         break;
                     }
-                    else if (CashoutValue > atm.getCashAvailableInATM()){
-                        System.out.println("ATM doesn't have this amount of money, maximum amount is: "
-                                + atm.getCashAvailableInATM() + " Please select another value: ");
-                        CashoutValue = Double.parseDouble(reader.nextLine());
+                    else if (cashoutValue > atm.getCashAvailableInATM()){
+
+                        System.out.println("ATM doesn't have this amount of money, maximum amount available for cashout is: "
+                                + atm.getCashAvailableInATM() + " Please enter another value: ");
+                        cashoutValue = Double.parseDouble(reader.nextLine());
                     }
-                    else if (CashoutValue > CardBalance){
+                    else if (cashoutValue > creditCardAmountOfMoney){
                         System.out.println("Creditcard doesn't have this amount of money, it's balance is: "
-                                + UserCreditCard.getAmountOfMoney() + " Please select another value: ");
-                        CashoutValue = Double.parseDouble(reader.nextLine());
+                                + userCreditCard.getAmountOfMoney() + " Please enter another value: ");
+                        cashoutValue = Double.parseDouble(reader.nextLine());
                     }
                 }
-                UserCreditCard.changeBalance(UserCreditCard.getAmountOfMoney()-CashoutValue);
-                atm.setATMBalance(atm.getCashAvailableInATM() - CashoutValue);
-                System.out.println("ATM balance: " + atm.getCashAvailableInATM() + ", Card balance: " + UserCreditCard.getAmountOfMoney());
-                return UserCreditCard;
+
+                userCreditCard.setCreditCardBalance(userCreditCard.getAmountOfMoney()-cashoutValue);
+                atm.setATMBalance(atm.getCashAvailableInATM() - cashoutValue);
+                System.out.println("Remaining credit card balance: " + userCreditCard.getAmountOfMoney());
+                return userCreditCard;
             }
         }
         else{
             System.out.println("Cannot cashout from card, card is blocked");
         }
-        return UserCreditCard;
+        return userCreditCard;
     }
 
-    public static CreditCard AddMoneyToCard(CreditCard UserCreditCard, boolean UserIsAuthorized, ATM atm){
-        double CardBalance = UserCreditCard.getAmountOfMoney();
+    public static CreditCard addMoneyToCreditCard(CreditCard userCreditCard, boolean userIsAuthorized, ATM atm){
 
-        if (UserIsAuthorized == true){
+        if (userIsAuthorized == true){
 
             Scanner reader = new Scanner(System.in);
-            System.out.println("\n Enter amount of money you want to add to your balance: ");
+            System.out.println("Enter amount of money you want to add to your balance: ");
             //string to double, so it can read even numbers like "100" without the "100.0"
-            Double AddMoneyToCardValue = Double.parseDouble(reader.nextLine());
+            Double moneyToBeAddedToCreditCard = Double.parseDouble(reader.nextLine());
 
             while (true){
-                if (AddMoneyToCardValue <= 1000000.0){
+
+                if (moneyToBeAddedToCreditCard <= 1000000.0){
                     break;
                 }
-                else if (AddMoneyToCardValue > 1000000.0){
+                else if (moneyToBeAddedToCreditCard > 1000000.0){
                     System.out.println("ATM doesn't support this amount of money, maximum amount is: 1 000 000."
-                            + " Please select another value: ");
-                    AddMoneyToCardValue = Double.parseDouble(reader.nextLine());
+                            + " Please enter another value: ");
+                    moneyToBeAddedToCreditCard = Double.parseDouble(reader.nextLine());
                 }
             }
 
-            UserCreditCard.changeBalance(UserCreditCard.getAmountOfMoney() + AddMoneyToCardValue);
-            atm.setATMBalance(atm.getCashAvailableInATM() + AddMoneyToCardValue);
-            System.out.println("ATM balance: " + atm.getCashAvailableInATM() + ", Card balance: " + UserCreditCard.getAmountOfMoney());
-            return UserCreditCard;
+            userCreditCard.setCreditCardBalance(userCreditCard.getAmountOfMoney() + moneyToBeAddedToCreditCard);
+            atm.setATMBalance(atm.getCashAvailableInATM() + moneyToBeAddedToCreditCard);
+
+            System.out.println("Updated credit card balance: " + userCreditCard.getAmountOfMoney());
+            return userCreditCard;
         }
         else{
             System.out.println("Cannot add money to card, card is blocked");
         }
-        return UserCreditCard;
+        return userCreditCard;
     }
-
-    public double getATMBalance(){
-        return CashAvailableInATM;
-    }
-    public void setATMBalance(double NewValueOfCashAvailableInATM){
-        CashAvailableInATM = NewValueOfCashAvailableInATM;
-    }
-    /*
-    public static void HandleCardBalance(OptionalDouble CardBalance){
-        try {
-            double balanceOrThrow = CardBalance.orElseThrow(() -> new IllegalStateException("Card is blocked"));
-            System.out.println("Card balance: " + balanceOrThrow);
-        }
-        catch (IllegalStateException e) {
-            System.out.println(e.getMessage());
-        }
-    }
-     */
 }

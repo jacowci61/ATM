@@ -5,46 +5,54 @@ import java.util.*;
 
 public class WorkWithData {
     public static String[] readFileIntoStringArray(String filePath) throws IOException {
-        List<String> linesList = new ArrayList<>();
+
+        List<String> stringArray = new ArrayList<>();
+
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath))) {
             String line;
             while ((line = bufferedReader.readLine()) != null) {
-                linesList.add(line);
+                stringArray.add(line);
             }
         }
-        return linesList.toArray(new String[0]);
+        return stringArray.toArray(new String[0]);
     }
 
     public static List<CreditCard> readStringArrayIntoObjectArray(String filePath) {
 
         List<CreditCard> CreditCardsList = null;
         try {
-            String[] lines = WorkWithData.readFileIntoStringArray(filePath);
+            String[] stringArrayWithDataFromFile = WorkWithData.readFileIntoStringArray(filePath);
 
-            CreditCardsList = new ArrayList<CreditCard>(lines.length);
+            CreditCardsList = new ArrayList<CreditCard>(stringArrayWithDataFromFile.length);
 
             boolean firstIteration = true;
-            for (String line : lines) {
+
+            for (String line : stringArrayWithDataFromFile) {
+
                 if (firstIteration){
-                    String[] TempObject = line.split("\\s+");
-                    ATM Atm = new ATM(TempObject[0],Double.parseDouble(TempObject[1]));
-                    BankAccount data1 = new BankAccount(TempObject[0], Double.parseDouble(TempObject[1]));
 
                     firstIteration = false;
-                    String tempDate = "01-01-1970 00:00:00";
-                    LocalDateTime myDateObj = LocalDateTime.parse(tempDate, DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"));
 
-                    CreditCard data2 = new CreditCard(data1, 1L, 3897, true, myDateObj);
-                    CreditCardsList.add(data2);
+                    String tempDataAsString = "01-01-1970 00:00:00";
+                    LocalDateTime tempDate = LocalDateTime.parse(tempDataAsString, DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"));
+
+                    String[] tempObject = line.split("\\s+");
+                    BankAccount tempBankAccount = new BankAccount(tempObject[0], Double.parseDouble(tempObject[1]));
+                    CreditCard ATMDataAsCreditCard = new CreditCard(tempBankAccount, 1L, 1111, false, tempDate);
+
+                    CreditCardsList.add(ATMDataAsCreditCard);
                 }
                 else{
-                    //System.out.println("Lines in txt file are: " + line);
-                    String[] TempObject = line.split("\\s+");
-                    BankAccount data1 = new BankAccount(TempObject[0], Double.parseDouble(TempObject[1]));
-                    String tempDate = TempObject[5] + " " + TempObject[6];
-                    LocalDateTime myDateObj = LocalDateTime.parse(tempDate, DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"));
-                    CreditCard data2 = new CreditCard(data1, Long.parseLong(readInputtedCreditCard(TempObject[2],true)), Integer.parseInt(TempObject[3]), Boolean.parseBoolean(TempObject[4]), myDateObj);
-                    CreditCardsList.add(data2);
+
+                    String[] tempObject = line.split("\\s+");
+
+                    String tempDateAsString = tempObject[5] + " " + tempObject[6];
+                    LocalDateTime tempDate = LocalDateTime.parse(tempDateAsString, DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"));
+
+                    BankAccount tempBankAccount = new BankAccount(tempObject[0], Double.parseDouble(tempObject[1]));
+                    CreditCard creditCard = new CreditCard(tempBankAccount, Long.parseLong(readInputtedCreditCard(tempObject[2],true)),
+                            Integer.parseInt(tempObject[3]), Boolean.parseBoolean(tempObject[4]), tempDate);
+                    CreditCardsList.add(creditCard);
                 }
             }
         } catch (IOException e) {
@@ -53,48 +61,45 @@ public class WorkWithData {
         return CreditCardsList;
     }
 
-    public static String[] readObjectArrayIntoStringArray(List<CreditCard> list, ATM atmInstance) {
-        String tempDate = "01-01-1970 00:00:00";
-        LocalDateTime myDateObj = LocalDateTime.parse(tempDate, DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"));
-        List<CreditCard> CreditCardsList = list;
+    public static String[] readObjectArrayIntoStringArray(List<CreditCard> listOfCreditCards, ATM atmInstance) {
+
+        List<CreditCard> CreditCardsList = listOfCreditCards;
         ATM atm = atmInstance;
-        BankAccount atmElement1 = new BankAccount(atm.getATMID(), atm.getCashAvailableInATM());
-        CreditCard atmElement = new CreditCard(atmElement1, 0, 0, false, myDateObj);
 
-        list.add(0, atmElement);
-        String[] lines = new String[list.size()];
+        String tempDateAsString = "01-01-1970 00:00:00";
+        LocalDateTime tempDate = LocalDateTime.parse(tempDateAsString, DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"));
 
-        for (int i = 0; i < lines.length; ++i) {
+        BankAccount tempBankAccount = new BankAccount(atm.getATMID(), atm.getCashAvailableInATM());
+        CreditCard ATMDataAsCreditCard = new CreditCard(tempBankAccount, 1L, 1111, false, tempDate);
+
+        listOfCreditCards.add(0, ATMDataAsCreditCard);
+        String[] stringArrayOfCreditCards = new String[listOfCreditCards.size()];
+
+        for (int i = 0; i < stringArrayOfCreditCards.length; ++i) {
+
             if (i == 0){
+
                 String line = CreditCardsList.get(i).getBankAccountID() + " " +  CreditCardsList.get(i).getAmountOfMoney();
-                lines[i] = line;
+                stringArrayOfCreditCards[i] = line;
             }
             else{
+
                 String line = CreditCardsList.get(i).getBankAccountID() + " " +  CreditCardsList.get(i).getAmountOfMoney() + " " +
-                        CreditCardsList.get(i).getCreditCardNumber() + " " + CreditCardsList.get(i).getPIN() + " " +
-                        CreditCardsList.get(i).getIsCreditCardBlocked() + " " + CreditCardsList.get(i).getDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"));
-                lines[i] = line;
+                        changeCreditCardIDFormat(CreditCardsList.get(i).getCreditCardID()) + " " + CreditCardsList.get(i).getCreditCardPIN() + " " +
+                        CreditCardsList.get(i).getIsCreditCardBlocked() + " " +
+                        CreditCardsList.get(i).getDateOfCreditCardBlock().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"));
+                stringArrayOfCreditCards[i] = line;
             }
         }
-        return lines;
+        return stringArrayOfCreditCards;
     }
 
-    public static Map<String,Object> findElementContainingSequence(List<CreditCard> CreditCardsList, String query) {
-        for (CreditCard creditCard : CreditCardsList) {
-            if (String.valueOf(creditCard.getCreditCardNumber()).contains(query)) {
-                Map<String,Object> CreditCardAndIndexMap = new HashMap<>();
-                CreditCardAndIndexMap.put("credit card", creditCard);
-                CreditCardAndIndexMap.put("index", CreditCardsList.indexOf(creditCard));
-                return CreditCardAndIndexMap;
-            }
-        }
-        return null; // TO FIX: throw error if element not found
-    }
+    public static void overwriteFileWithStringArray(String filePath, String[] stringArray) throws IOException {
 
-    public static void overwriteFile(String filePath, String[] list) throws IOException {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
             try {
-                for (String line : list) {
+                for (String line : stringArray) {
+
                     writer.write(line);
                     writer.newLine();
                 }
@@ -102,76 +107,96 @@ public class WorkWithData {
                 throw new RuntimeException(e);
             }
         }
+        System.out.println("File overwritten with new data successfully.");
     }
 
-    public static String readInputtedCreditCard(String RequestedCardtemp, boolean IsFromFile){
+    public static String readInputtedCreditCard(String inputtedCreditCard, boolean readFromFile){
         Scanner reader = new Scanner(System.in);
-        String[] rq1;
-        boolean a1 = true;
-        if (IsFromFile == false){
-            while(a1){
-                rq1 = RequestedCardtemp.split("[ -]");
-                RequestedCardtemp = "";
-                for (String line : rq1){
-                    RequestedCardtemp += line;
+        String[] requestedCard;
+        boolean loopBreak = false;
+        if (readFromFile == false){
+
+            while(loopBreak == false){
+                requestedCard = inputtedCreditCard.split("[ -]");
+                inputtedCreditCard = "";
+
+                for (String line : requestedCard){
+                    inputtedCreditCard += line;
                 }
-                if (RequestedCardtemp.length() == 16){
-                    a1 = false;
+
+                if (inputtedCreditCard.length() == 16){
+                    loopBreak = true;
                 }
                 else{
-                    RequestedCardtemp = "";
-                    rq1 = null;
-                    System.out.println("Incorrect creditcard number entered. Enter a correct 16-number creditcard number: ");
+                    inputtedCreditCard = "";
+                    requestedCard = null;
+                    System.out.println("Incorrect credit card number entered. Enter a correct 16-number credit card number: ");
 
-                    RequestedCardtemp = reader.nextLine();
-                    rq1 = RequestedCardtemp.split("[ -]");
+                    inputtedCreditCard = reader.nextLine();
+                    requestedCard = inputtedCreditCard.split("[ -]"); // split either by space or dash
 
-                    RequestedCardtemp = "";
-                    for (String line : rq1){
-                        RequestedCardtemp += line;
+                    inputtedCreditCard = "";
+                    for (String line : requestedCard){
+                        inputtedCreditCard += line;
                     }
                 }
             }
         }
-        else if (IsFromFile == true){
-            while(a1){
-                rq1 = RequestedCardtemp.split("[ -]");
-                RequestedCardtemp = "";
-                for (String line : rq1){
-                    RequestedCardtemp += line;
+        else if (readFromFile == true){
+
+            while(loopBreak == false){
+
+                requestedCard = inputtedCreditCard.split("[ -]");
+                inputtedCreditCard = "";
+
+                for (String line : requestedCard){
+                    inputtedCreditCard += line;
                 }
-                if (RequestedCardtemp.length() == 16){
-                    a1 = false;
+
+                if (inputtedCreditCard.length() == 16){
+                    loopBreak = true;
                 }
                 else{
                     System.out.println("Error in reading .txt file");
                     //write handling smh. Maybe through optional parameters of this method, idk
                     /*
-                    RequestedCardtemp = "";
-                    rq1 = null;
+                    inputtedCreditCard = "";
+                    requestedCard = null;
                     System.out.println("Incorrect creditcard number entered. Enter a correct 16-number creditcard number: ");
 
-                    RequestedCardtemp = reader.nextLine();
-                    rq1 = RequestedCardtemp.split("[ -]");
+                    inputtedCreditCard = reader.nextLine();
+                    requestedCard = inputtedCreditCard.split("[ -]");
 
-                    RequestedCardtemp = "";
-                    for (String line : rq1){
-                        RequestedCardtemp += line;
+                    inputtedCreditCard = "";
+                    for (String line : requestedCard){
+                        inputtedCreditCard += line;
                     }
 
                      */
                 }
             }
         }
-
-        //long RequestedCard = Long.parseLong(RequestedCardtemp);
-        //return RequestedCard;
-        return RequestedCardtemp;
+        return inputtedCreditCard;
     }
 
-    public static boolean blockTimeExceeded(CreditCard creditCard){
+    public static Map<String,Object> findCreditCardByNumber(List<CreditCard> listOfCreditCards, String requestedCreditCardID) {
+
+        for (CreditCard creditCard : listOfCreditCards) {
+
+            if (String.valueOf(creditCard.getCreditCardID()).contains(requestedCreditCardID)) {
+
+                Map<String,Object> CreditCardObjectAndItsIndex = new HashMap<>();
+                CreditCardObjectAndItsIndex.put("credit card", creditCard);
+                CreditCardObjectAndItsIndex.put("index", listOfCreditCards.indexOf(creditCard));
+                return CreditCardObjectAndItsIndex;
+            }
+        }
+        return null;
+    }
+
+    public static boolean isCreditCardBlockTimeExceeded(CreditCard creditCard){
         boolean blockTimeExceeded;
-        if (LocalDateTime.now().isAfter(creditCard.getDate()))
+        if (LocalDateTime.now().isAfter(creditCard.getDateOfCreditCardBlock()))
         {
             blockTimeExceeded = true;
         }
@@ -180,4 +205,25 @@ public class WorkWithData {
         }
         return blockTimeExceeded;
     }
+
+    public static String changeCreditCardIDFormat(long creditCardID){
+
+        String passedData = String.valueOf(creditCardID);
+        String final1 = "";
+        int dashCounter = 0; // used to trigger addition of dash between 4 digits of ID of credit card
+
+
+        for (int i = 0; i < passedData.length(); ++i){
+            dashCounter = ++dashCounter;
+            if (dashCounter == 4 && i != passedData.length()-1){ // second condition is to avoid adding dash in the end of ID of credit card
+                final1 += (passedData.charAt(i) + "-");
+                dashCounter = 0;
+            }
+            else{
+                final1 += String.valueOf(passedData.charAt(i));
+            }
+        }
+        return final1;
+    }
+
 }
