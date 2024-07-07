@@ -85,9 +85,14 @@ public class Main {
                 DateTimeFormatter formatOfDate = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
                 String formattedDate = currentDateTime.format(formatOfDate);
                 LocalDateTime formattedDateOfBlock = LocalDateTime.parse(formattedDate, DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"));
-                retrievedCard.setDate(formattedDateOfBlock);
 
-                listOfCreditCards.set(retrievedCardIndex, retrievedCard);
+                if ((listOfCreditCards.get(retrievedCardIndex).getDateOfCreditCardBlock()).format(formatOfDate).equals("01-01-1970 00:00:00")){
+                    retrievedCard.setDate(formattedDateOfBlock);
+                    listOfCreditCards.set(retrievedCardIndex, retrievedCard);
+                }
+                else{
+                    break;
+                }
                 break;
             }
         }
