@@ -181,8 +181,11 @@ public class WorkWithData {
 
     public static boolean isCreditCardBlockTimeExceeded(CreditCard creditCard){
         boolean blockTimeExceeded;
-        if (LocalDateTime.now().isAfter(creditCard.getDateOfCreditCardBlock()))
+
+        if ((LocalDateTime.now()).isAfter(creditCard.getDateOfCreditCardBlock().plusHours(24)))
         {
+            System.out.println("txt: " + creditCard.getDateOfCreditCardBlock());
+            System.out.println("now: " + LocalDateTime.now());
             blockTimeExceeded = true;
         }
         else{
