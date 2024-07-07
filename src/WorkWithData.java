@@ -158,21 +158,6 @@ public class WorkWithData {
                 }
                 else{
                     System.out.println("Error in reading .txt file");
-                    //write handling smh. Maybe through optional parameters of this method, idk
-                    /*
-                    inputtedCreditCard = "";
-                    requestedCard = null;
-                    System.out.println("Incorrect creditcard number entered. Enter a correct 16-number creditcard number: ");
-
-                    inputtedCreditCard = reader.nextLine();
-                    requestedCard = inputtedCreditCard.split("[ -]");
-
-                    inputtedCreditCard = "";
-                    for (String line : requestedCard){
-                        inputtedCreditCard += line;
-                    }
-
-                     */
                 }
             }
         }
@@ -225,5 +210,4 @@ public class WorkWithData {
         }
         return final1;
     }
-
 }

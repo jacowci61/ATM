@@ -15,6 +15,7 @@ public class CreditCard extends BankAccount {
         this.localDateTime = localDateTime;
     }
 
+
     public void setCreditCardID(long creditCardNumber){
         this.creditCardID = creditCardNumber;
     }
@@ -36,19 +37,19 @@ public class CreditCard extends BankAccount {
     }
 
 
-    public long getCreditCardID(){
-        return creditCardID;
-    }
-
-    public int getCreditCardPIN(){
-        return PIN;
-    }
-
     public boolean getIsCreditCardBlocked(){
         return isCreditCardBlocked;
     }
 
     public LocalDateTime getDateOfCreditCardBlock(){
         return localDateTime;
+    }
+
+    public long getCreditCardID(){
+        return creditCardID;
+    }
+
+    public int getCreditCardPIN(){
+        return PIN;
     }
 }

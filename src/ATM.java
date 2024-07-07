@@ -151,7 +151,6 @@ public class ATM {
 
             Scanner reader = new Scanner(System.in);
             System.out.println("Enter amount of money you want to add to your balance: ");
-            //string to double, so it can read even numbers like "100" without the "100.0"
             Double moneyToBeAddedToCreditCard = Double.parseDouble(reader.nextLine());
 
             while (true){

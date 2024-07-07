@@ -1,7 +1,6 @@
 public class BankAccount {
     private String bankAccountID;
     private double amountOfMoney;
-    // basically make data private (unaccessible from outside the class) and make getters/setters to access it
 
     public BankAccount(String bankAccountID, double amountOfMoney){
         this.bankAccountID = bankAccountID;

@@ -8,8 +8,7 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
 
-        String filePath = "src/ATMDataTEST.txt";
-        String filePath2 = "src/ATMData.txt";
+        String filePath = "src/ATMData.txt";
         List<CreditCard> listOfCreditCards = WorkWithData.readStringArrayIntoObjectArray(filePath);
 
         //region Reading ATM data
@@ -94,6 +93,6 @@ public class Main {
         }
 
         String[] list1 = WorkWithData.readObjectArrayIntoStringArray(listOfCreditCards,atm);
-        WorkWithData.overwriteFileWithStringArray(filePath2, list1);
+        WorkWithData.overwriteFileWithStringArray(filePath, list1);
     }
 }
