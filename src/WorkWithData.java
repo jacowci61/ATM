@@ -184,8 +184,6 @@ public class WorkWithData {
 
         if ((LocalDateTime.now()).isAfter(creditCard.getDateOfCreditCardBlock().plusHours(24)))
         {
-            System.out.println("txt: " + creditCard.getDateOfCreditCardBlock());
-            System.out.println("now: " + LocalDateTime.now());
             blockTimeExceeded = true;
         }
         else{
