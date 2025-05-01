@@ -12,3 +12,5 @@ Data in file is split by spaces and represents following elements:
      - CreditCardID
      - IscreditCardBlocked
      - localDateTime when credit card was blocked. If "IscreditCardBlocked == false", 01-01-1970 is used. Otherwise, date represents when user entered 3 incorrect PINs and blocked credit card
+## Screenshots
+![b5ff42a6-1ee3-4811-8991-4f9da3c7e744 (1)](https://github.com/user-attachments/assets/4077fa07-2ed1-4600-8f00-de77f232daf5)
